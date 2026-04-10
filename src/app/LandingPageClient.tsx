@@ -24,11 +24,11 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const current = document.documentElement.getAttribute('data-theme')
-      if (current === 'dark' || current === 'light') setTheme(current)
+      if (current === 'dark' || current === 'light') {
+        setTheme(prev => prev === current ? prev : current)
+      }
     })
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-    const current = document.documentElement.getAttribute('data-theme')
-    if (current === 'dark' || current === 'light') setTheme(current)
     return () => observer.disconnect()
   }, [])
 
@@ -75,6 +75,7 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
                 width={849}
                 height={732}
                 className={styles.heroCalendarImg}
+                sizes="(max-width: 767px) 100vw, 849px"
                 priority
               />
             </div>
