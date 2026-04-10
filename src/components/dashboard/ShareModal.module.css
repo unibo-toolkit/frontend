@@ -88,8 +88,6 @@
   .calButton {
     padding: var(--spacing-12) var(--spacing-16);
     white-space: normal;
-    text-align: left;
-    justify-content: flex-start;
   }
 
   .footer {
