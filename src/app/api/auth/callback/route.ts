@@ -88,14 +88,14 @@ async function handleCallback(
       provider,
       paramKeys,
     })
-    return NextResponse.redirect(new URL('/auth/error?reason=missing_params', baseUrl))
+    return NextResponse.redirect(new URL('/auth/error?reason=missing_params', baseUrl), 303)
   }
 
   try {
     const authServiceUrl = process.env.AUTH_SERVICE_URL || process.env.NEXT_PUBLIC_API_URL || ''
     if (!authServiceUrl) {
       logError('Auth callback missing AUTH_SERVICE_URL env', { provider })
-      return NextResponse.redirect(new URL('/auth/error?reason=config', baseUrl))
+      return NextResponse.redirect(new URL('/auth/error?reason=config', baseUrl), 303)
     }
 
     logInfo('Auth callback calling exchange', { provider, authServiceUrl, codeLen: code.length })
@@ -121,7 +121,7 @@ async function handleCallback(
         provider,
         authServiceUrl,
       })
-      return NextResponse.redirect(new URL(`/auth/error?reason=exchange_${response.status}`, baseUrl))
+      return NextResponse.redirect(new URL(`/auth/error?reason=exchange_${response.status}`, baseUrl), 303)
     }
 
     const json = await response.json()
@@ -140,7 +140,7 @@ async function handleCallback(
         hasRefresh: !!refresh_token,
         responseKeys: Object.keys(json || {}),
       })
-      return NextResponse.redirect(new URL('/auth/error?reason=invalid_tokens', baseUrl))
+      return NextResponse.redirect(new URL('/auth/error?reason=invalid_tokens', baseUrl), 303)
     }
 
     const cookieStore = await cookies()
@@ -149,14 +149,14 @@ async function handleCallback(
     cookieStore.delete('auth_provider')
 
     logInfo('Auth callback success', { provider, redirect })
-    return NextResponse.redirect(new URL(redirect, baseUrl))
+    return NextResponse.redirect(new URL(redirect, baseUrl), 303)
   } catch (error) {
     logError('Auth callback error', {
       error: String(error),
       stack: error instanceof Error ? error.stack : undefined,
       provider,
     })
-    return NextResponse.redirect(new URL('/auth/error?reason=exception', baseUrl))
+    return NextResponse.redirect(new URL('/auth/error?reason=exception', baseUrl), 303)
   }
 }
 
@@ -208,6 +208,6 @@ export async function POST(request: NextRequest) {
       rawBodyLength: rawBody.length,
     })
     const baseUrl = getBaseUrl(request)
-    return NextResponse.redirect(new URL('/auth/error?reason=post_parse', baseUrl))
+    return NextResponse.redirect(new URL('/auth/error?reason=post_parse', baseUrl), 303)
   }
 }
