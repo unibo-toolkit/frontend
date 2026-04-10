@@ -18,8 +18,9 @@ export function useAuth(enabled = true) {
   const { isLoggedIn, user, setUser, logout } = useAuthStore()
   const [authReady, setAuthReady] = useState(!enabled)
 
-  const handleAuthFailure = useCallback(() => {
+  const handleAuthFailure = useCallback(async () => {
     stopBackgroundRefresh()
+    try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
     logout()
     window.location.href = '/auth'
   }, [logout])
