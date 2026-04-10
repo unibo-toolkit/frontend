@@ -3,6 +3,34 @@ import { logError } from '@/lib/logger'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || ''
 const PROXY_TIMEOUT = 15_000
+const MAX_RETRIES = 2
+const RETRY_DELAY_MS = 150
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function fetchWithRetry(
+  targetUrl: string,
+  init: RequestInit,
+  isIdempotent: boolean,
+): Promise<Response> {
+  let lastError: unknown
+  const attempts = isIdempotent ? MAX_RETRIES + 1 : 1
+
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fetch(targetUrl, init)
+    } catch (error) {
+      lastError = error
+      if (error instanceof DOMException && error.name === 'AbortError') throw error
+      if (i < attempts - 1) {
+        await sleep(RETRY_DELAY_MS * (i + 1))
+      }
+    }
+  }
+  throw lastError
+}
 
 async function proxyRequest(request: NextRequest) {
   const { pathname, search } = request.nextUrl
@@ -24,20 +52,25 @@ async function proxyRequest(request: NextRequest) {
     headers.set('Authorization', `Bearer ${accessToken}`)
   }
 
-  const body = request.method !== 'GET' && request.method !== 'HEAD'
-    ? await request.text()
-    : undefined
+  const method = request.method
+  const body = method !== 'GET' && method !== 'HEAD' ? await request.text() : undefined
+  const isIdempotent = method === 'GET' || method === 'HEAD'
+
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT)
 
   try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT)
-
-    const response = await fetch(targetUrl, {
-      method: request.method,
-      headers,
-      body,
-      signal: controller.signal,
-    })
+    const response = await fetchWithRetry(
+      targetUrl,
+      {
+        method,
+        headers,
+        body,
+        signal: controller.signal,
+        cache: 'no-store',
+      },
+      isIdempotent,
+    )
     clearTimeout(timeoutId)
 
     if (response.status === 204 || response.headers.get('Content-Length') === '0') {
@@ -53,14 +86,15 @@ async function proxyRequest(request: NextRequest) {
       },
     })
   } catch (error) {
+    clearTimeout(timeoutId)
     if (error instanceof DOMException && error.name === 'AbortError') {
-      logError('API proxy timeout', { url: targetUrl, method: request.method })
+      logError('API proxy timeout', { url: targetUrl, method })
       return new NextResponse(JSON.stringify({ error: 'Gateway timeout' }), {
         status: 504,
         headers: { 'Content-Type': 'application/json' },
       })
     }
-    logError('API proxy error', { url: targetUrl, method: request.method, error: String(error) })
+    logError('API proxy error', { url: targetUrl, method, error: String(error) })
     return new NextResponse(JSON.stringify({ error: 'Bad gateway' }), {
       status: 502,
       headers: { 'Content-Type': 'application/json' },
