@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { setAuthCookies } from '@/lib/cookies'
-import { logError } from '@/lib/logger'
+import { logError, logInfo } from '@/lib/logger'
 
 function detectProvider(params: URLSearchParams): string | null {
   const explicit = params.get('provider')
@@ -43,12 +43,28 @@ function getBaseUrl(request: NextRequest): string {
 async function handleCallback(
   request: NextRequest,
   params: URLSearchParams,
+  method: string,
 ): Promise<NextResponse> {
   const baseUrl = getBaseUrl(request)
   const code = params.get('code')
   const provider = detectProvider(params)
   const state = params.get('state')
   const userJson = params.get('user')
+  const idToken = params.get('id_token')
+  const paramKeys = Array.from(new Set(Array.from(params.keys())))
+
+  logInfo('Auth callback received', {
+    method,
+    paramKeys,
+    hasCode: !!code,
+    hasState: !!state,
+    hasUser: !!userJson,
+    hasIdToken: !!idToken,
+    detectedProvider: provider,
+    iss: params.get('iss') || null,
+    baseUrl,
+    hasAuthRedirectCookie: !!request.cookies.get('auth_redirect')?.value,
+  })
 
   const redirectCookie = request.cookies.get('auth_redirect')?.value
   const redirect = sanitizeRedirect(
@@ -56,11 +72,24 @@ async function handleCallback(
   )
 
   if (!code || !provider) {
-    return NextResponse.redirect(new URL('/auth/error?reason=server', baseUrl))
+    logError('Auth callback missing code or provider', {
+      method,
+      hasCode: !!code,
+      provider,
+      paramKeys,
+    })
+    return NextResponse.redirect(new URL('/auth/error?reason=missing_params', baseUrl))
   }
 
   try {
     const authServiceUrl = process.env.AUTH_SERVICE_URL || process.env.NEXT_PUBLIC_API_URL || ''
+    if (!authServiceUrl) {
+      logError('Auth callback missing AUTH_SERVICE_URL env', { provider })
+      return NextResponse.redirect(new URL('/auth/error?reason=config', baseUrl))
+    }
+
+    logInfo('Auth callback calling exchange', { provider, authServiceUrl, codeLen: code.length })
+
     const response = await fetch(`${authServiceUrl}/api/v1/auth/exchange`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,10 +106,12 @@ async function handleCallback(
       const body = await response.text()
       logError('Auth callback exchange failed', {
         status: response.status,
-        body: body.substring(0, 500),
+        statusText: response.statusText,
+        body: body.substring(0, 1000),
         provider,
+        authServiceUrl,
       })
-      return NextResponse.redirect(new URL('/auth/error?reason=server', baseUrl))
+      return NextResponse.redirect(new URL(`/auth/error?reason=exchange_${response.status}`, baseUrl))
     }
 
     const json = await response.json()
@@ -94,36 +125,78 @@ async function handleCallback(
       access_token.trim().length === 0 ||
       refresh_token.trim().length === 0
     ) {
-      logError('Auth callback invalid tokens', { hasAccess: !!access_token, hasRefresh: !!refresh_token })
-      return NextResponse.redirect(new URL('/auth/error?reason=server', baseUrl))
+      logError('Auth callback invalid tokens', {
+        hasAccess: !!access_token,
+        hasRefresh: !!refresh_token,
+        responseKeys: Object.keys(json || {}),
+      })
+      return NextResponse.redirect(new URL('/auth/error?reason=invalid_tokens', baseUrl))
     }
 
     const cookieStore = await cookies()
     setAuthCookies(cookieStore, access_token, refresh_token)
     cookieStore.delete('auth_redirect')
 
+    logInfo('Auth callback success', { provider, redirect })
     return NextResponse.redirect(new URL(redirect, baseUrl))
   } catch (error) {
-    logError('Auth callback error', { error: String(error) })
-    return NextResponse.redirect(new URL('/auth/error?reason=server', baseUrl))
+    logError('Auth callback error', {
+      error: String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      provider,
+    })
+    return NextResponse.redirect(new URL('/auth/error?reason=exception', baseUrl))
   }
 }
 
 export async function GET(request: NextRequest) {
-  return handleCallback(request, request.nextUrl.searchParams)
+  return handleCallback(request, request.nextUrl.searchParams, 'GET')
 }
 
 export async function POST(request: NextRequest) {
+  const contentType = request.headers.get('content-type') || ''
+  logInfo('Auth callback POST entry', {
+    contentType,
+    url: request.url,
+    hasForwardedHost: !!request.headers.get('x-forwarded-host'),
+    forwardedHost: request.headers.get('x-forwarded-host'),
+    forwardedProto: request.headers.get('x-forwarded-proto'),
+    host: request.headers.get('host'),
+    referer: request.headers.get('referer'),
+    origin: request.headers.get('origin'),
+  })
+
+  let rawBody = ''
   try {
-    const formData = await request.formData()
-    const params = new URLSearchParams()
-    for (const [key, value] of formData.entries()) {
-      if (typeof value === 'string') params.append(key, value)
-    }
-    return handleCallback(request, params)
+    rawBody = await request.clone().text()
+    logInfo('Auth callback POST raw body', {
+      length: rawBody.length,
+      preview: rawBody.substring(0, 500).replace(/code=[^&]+/g, 'code=***').replace(/id_token=[^&]+/g, 'id_token=***'),
+    })
   } catch (error) {
-    logError('Auth callback POST parse error', { error: String(error) })
+    logError('Auth callback POST raw body read failed', { error: String(error) })
+  }
+
+  try {
+    const params = new URLSearchParams()
+    if (contentType.includes('application/x-www-form-urlencoded')) {
+      const parsed = new URLSearchParams(rawBody)
+      for (const [key, value] of parsed.entries()) params.append(key, value)
+    } else {
+      const formData = await request.formData()
+      for (const [key, value] of formData.entries()) {
+        if (typeof value === 'string') params.append(key, value)
+      }
+    }
+    return handleCallback(request, params, 'POST')
+  } catch (error) {
+    logError('Auth callback POST parse error', {
+      error: String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      contentType,
+      rawBodyLength: rawBody.length,
+    })
     const baseUrl = getBaseUrl(request)
-    return NextResponse.redirect(new URL('/auth/error?reason=server', baseUrl))
+    return NextResponse.redirect(new URL('/auth/error?reason=post_parse', baseUrl))
   }
 }
