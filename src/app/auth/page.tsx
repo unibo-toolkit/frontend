@@ -18,6 +18,7 @@ function AuthContent() {
     const sameSite = isHttps ? 'None' : 'Lax'
     const secure = isHttps ? ';Secure' : ''
     document.cookie = `auth_redirect=${encodeURIComponent(redirect)};path=/;max-age=600;SameSite=${sameSite}${secure}`
+    document.cookie = `auth_provider=${provider};path=/;max-age=600;SameSite=${sameSite}${secure}`
     const callbackUrl = `${window.location.origin}/api/auth/callback?provider=${provider}`
     window.location.href = `${apiBase}/api/v1/auth/${provider}?redirect_after=${encodeURIComponent(callbackUrl)}`
   }
