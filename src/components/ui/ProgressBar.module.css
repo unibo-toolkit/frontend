@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12) 0;
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-base);
+}
+
+.label {
+  color: var(--fg-200);
+}
+
+.percentage {
+  color: var(--fg-100);
+}
+
+.track {
+  height: 8px;
+  background-color: var(--bg-150);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background-color: var(--fg-200);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}

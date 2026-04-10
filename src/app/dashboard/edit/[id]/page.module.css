@@ -1,0 +1,387 @@
+.page {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-main);
+}
+
+.main {
+  flex: 1;
+  padding: var(--spacing-48) var(--spacing-64);
+  overflow-y: auto;
+  height: 100vh;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+  margin-bottom: var(--spacing-24);
+}
+
+.breadcrumbRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+/* Mobile header row with burger (shown on mobile only) */
+.mobileTopBar {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-24);
+}
+
+.breadcrumb a {
+  color: var(--fg-200);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--fg-100);
+}
+
+.breadcrumbSeparator {
+  color: var(--fg-250);
+}
+
+.breadcrumbCurrent {
+  color: var(--fg-100);
+}
+
+/* Back link */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+  text-decoration: none;
+  margin-bottom: var(--spacing-8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-primary), sans-serif;
+  padding: 0;
+}
+
+.backLink:hover {
+  opacity: 0.8;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: var(--text-xl);
+  color: var(--fg-200);
+  margin-bottom: var(--spacing-32);
+}
+
+/* Two-column layout */
+.content {
+  display: flex;
+  gap: var(--spacing-32);
+}
+
+.formCol {
+  flex: 0 0 clamp(460px, 36.5vw, 700px);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.previewCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-18);
+}
+
+/* Bordered card */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-48);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+/* Field label */
+.fieldLabel {
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+  margin-bottom: var(--spacing-4);
+}
+
+/* Input */
+.input {
+  width: 100%;
+  padding: var(--spacing-14) var(--spacing-16);
+  background-color: var(--bg-150);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--fg-100);
+  font-family: var(--font-primary), sans-serif;
+}
+
+.input:focus {
+  border-color: var(--fg-250);
+  outline: none;
+}
+
+/* Subjects header */
+.subjectsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subjectsTitle {
+  font-size: var(--text-xl);
+  color: var(--fg-100);
+}
+
+.subjectsCount {
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+}
+
+/* Form actions */
+.formActions {
+  display: flex;
+  gap: 26px;
+}
+
+.formActions > * {
+  flex: 1;
+}
+
+/* Delete button */
+.deleteBtn {
+  background-color: #fd585f;
+  color: black;
+  border-radius: var(--radius-full);
+  border: none;
+  padding: var(--spacing-16) var(--spacing-22);
+  font-size: var(--text-base);
+  cursor: pointer;
+  font-family: var(--font-primary), sans-serif;
+  transition: opacity 0.15s;
+}
+
+.deleteBtn:hover {
+  opacity: 0.85;
+}
+
+.deleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Preview label */
+.previewLabel {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+/* ICS section inside card */
+.icsSectionLabel {
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+}
+
+.icsUrl {
+  padding: var(--spacing-14) var(--spacing-16);
+  background-color: var(--bg-150);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+  word-break: break-all;
+  user-select: all;
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+/* Apple/Google calendar buttons */
+.calButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-12);
+  width: 100%;
+  padding: var(--spacing-14) var(--spacing-22);
+  height: 48px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--fg-150);
+  text-decoration: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  font-family: var(--font-primary), sans-serif;
+}
+
+.calButton:hover {
+  background-color: var(--bg-150);
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.statLabel {
+  color: var(--fg-200);
+}
+
+.statValue {
+  color: var(--fg-100);
+}
+
+/* Theme icon switching */
+[data-theme="light"] .iconDark {
+  display: none;
+}
+
+[data-theme="dark"] .iconLight {
+  display: none;
+}
+
+/* Responsive: tablet — reduce padding, keep two columns */
+@media (max-width: 1444px) {
+  .main {
+    padding: var(--spacing-32) var(--spacing-48);
+  }
+
+  .content {
+    gap: var(--spacing-24);
+  }
+
+  .formCol {
+    flex: 0 0 clamp(380px, 36.5vw, 600px);
+  }
+
+  .card {
+    padding: var(--spacing-32);
+  }
+}
+
+/* Responsive: stack columns, hide calendar preview */
+@media (max-width: 1140px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .formCol {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .previewCol {
+    width: 100%;
+  }
+
+  /* Hide calendar preview canvas but keep the ics card */
+  .previewLabel {
+    display: none;
+  }
+}
+
+/* Responsive: mobile */
+@media (max-width: 767px) {
+  .main {
+    padding: var(--spacing-24);
+  }
+
+  .card {
+    padding: var(--spacing-24);
+  }
+
+  .formActions {
+    flex-direction: column;
+    gap: var(--spacing-16);
+  }
+
+  .formActions > * {
+    width: 100%;
+  }
+
+  /* Show mobile top bar with burger */
+  .mobileTopBar {
+    display: flex;
+  }
+
+  /* Hide calendar preview column on mobile, keep only the form/ics card column */
+  .content {
+    flex-direction: column;
+  }
+
+  .previewCol {
+    display: none;
+  }
+
+  /* Breadcrumb becomes multi-line on mobile — each item + separator on its own line */
+  .breadcrumb {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-8);
+    font-size: var(--text-lg);
+  }
+}
+
+/* Error pages */
+.errorPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-24);
+  text-align: center;
+  color: var(--fg-100);
+  padding: var(--spacing-32);
+}
+
+.errorPage h1 {
+  font-size: var(--text-3xl);
+}
+
+.errorPage p {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+}
+
+.errorButton {
+  padding: var(--spacing-16) var(--spacing-22);
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  font-family: inherit;
+}

@@ -1,0 +1,84 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  background-color: var(--bg-150);
+  padding: var(--spacing-18) var(--spacing-22);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--fg-100);
+  border: none;
+  outline: none;
+  font-family: var(--font-primary), sans-serif;
+}
+
+.input::placeholder {
+  color: var(--fg-200);
+}
+
+.input:focus {
+  box-shadow: 0 0 0 1px var(--fg-250);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background-color: var(--bg-150);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  width: 100%;
+  padding: var(--spacing-22);
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-primary), sans-serif;
+  transition: background-color 0.15s;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:hover {
+  background-color: var(--bg-200);
+}
+
+.courseTitle {
+  font-size: var(--text-xl);
+  color: var(--fg-100);
+  line-height: 1.2;
+}
+
+.courseMeta {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+}
+
+.courseArea {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+}
+
+.loading,
+.empty {
+  padding: var(--spacing-16) var(--spacing-22);
+  font-size: var(--text-base);
+  color: var(--fg-200);
+  text-align: center;
+}

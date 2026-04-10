@@ -1,0 +1,173 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--bg-main);
+}
+
+/* Two-column layout: form left, calendar right */
+.container {
+  display: flex;
+  gap: 60px;
+  padding: 0 var(--spacing-80) var(--spacing-32);
+  align-items: flex-start;
+}
+
+.form {
+  flex: 0 0 clamp(460px, 36.5vw, 700px);
+  min-width: 0;
+}
+
+.preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-18);
+  min-width: 0;
+}
+
+.calendarWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-18);
+}
+
+.previewLabel {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-14);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.subtitle {
+  font-size: var(--text-xl);
+  color: var(--fg-200);
+}
+
+.selectRow {
+  display: flex;
+  gap: var(--spacing-16);
+  align-items: center;
+}
+
+.select {
+  flex: 1;
+  min-width: 0;
+  padding: var(--spacing-12) var(--spacing-20);
+  background-color: var(--bg-150);
+  border: none;
+  border-radius: 999px;
+  font-size: var(--text-base);
+  color: var(--fg-200);
+  cursor: pointer;
+  font-family: var(--font-primary), sans-serif;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='%23888' d='M0 0l6 7 6-7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 36px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectYear {
+  flex: 0 0 auto;
+  width: 110px;
+}
+
+.select:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--fg-250);
+}
+
+.noCurricula {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.createSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.nameRow {
+  display: flex;
+  gap: var(--spacing-16);
+  align-items: flex-end;
+}
+
+.nameInputWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  min-width: 0;
+}
+
+.nameLabel {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.nameInput {
+  width: 100%;
+  background-color: var(--bg-150);
+  padding: var(--spacing-18) var(--spacing-22);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--fg-100);
+  border: none;
+  outline: none;
+  font-family: var(--font-primary), sans-serif;
+}
+
+.nameInput::placeholder {
+  color: var(--fg-200);
+}
+
+.nameInput:focus {
+  box-shadow: 0 0 0 1px var(--fg-250);
+}
+
+/* Tablet: reduce padding and gap, keep two columns */
+@media (max-width: 1440px) {
+  .container {
+    padding: 0 var(--spacing-48) var(--spacing-32);
+    gap: var(--spacing-32);
+  }
+}
+
+/* Mobile: single column, hide calendar */
+@media (max-width: 1140px) {
+  .container {
+    flex-direction: column;
+    padding: 0 var(--spacing-24) var(--spacing-24);
+  }
+
+  .form {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .preview {
+    width: 100%;
+  }
+
+  .calendarWrapper {
+    display: none;
+  }
+
+  .nameRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

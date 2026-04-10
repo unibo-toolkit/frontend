@@ -1,0 +1,57 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Dependencies (will be installed fresh)
+node_modules
+.pnp
+.pnp.*
+
+# Next.js build artifacts
+.next
+out
+
+# Environment files (use build args / runtime env instead)
+.env
+.env.local
+.env.*.local
+
+# IDE / editor
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage
+.nyc_output
+test-results
+
+# Docs / plans
+README.md
+LICENSE
+plan
+docs
+
+# Misc
+.turbo
+.vercel
+.cache
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# Docker itself
+Dockerfile
+.dockerignore

@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.input {
+  background-color: var(--bg-150);
+  padding: var(--spacing-18) var(--spacing-22);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--fg-100);
+  width: 100%;
+  transition: box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: var(--fg-200);
+}
+
+.input:focus {
+  box-shadow: 0 0 0 1px var(--fg-250);
+}
