@@ -49,6 +49,18 @@ export function setAuthCookies(
 }
 
 export function clearAuthCookies(cookieStore: Awaited<ReturnType<typeof cookies>>) {
-  cookieStore.delete(COOKIE_ACCESS_TOKEN)
-  cookieStore.delete(COOKIE_REFRESH_TOKEN)
+  const secure = process.env.COOKIE_SECURE === 'true'
+  const domain = process.env.COOKIE_DOMAIN
+
+  const baseOptions = {
+    path: '/',
+    secure,
+    sameSite: 'lax' as const,
+    httpOnly: true,
+    maxAge: 0,
+    ...(domain && { domain }),
+  }
+
+  cookieStore.set(COOKIE_ACCESS_TOKEN, '', baseOptions)
+  cookieStore.set(COOKIE_REFRESH_TOKEN, '', baseOptions)
 }
