@@ -20,6 +20,7 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
   const t = useTranslations()
   const { data: stats } = usePublicStats()
   const [theme, setTheme] = useState<'dark' | 'light'>(initialTheme)
+  const [heroLoaded, setHeroLoaded] = useState(false)
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -32,12 +33,23 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => setHeroLoaded(true), 4000)
+    return () => clearTimeout(timeout)
+  }, [])
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
-    <div className={styles.page}>
+    <>
+      {!heroLoaded && (
+        <div className={styles.pageLoader}>
+          <div className={styles.pageLoaderSpinner} />
+        </div>
+      )}
+    <div className={styles.page} style={{ opacity: heroLoaded ? 1 : 0, pointerEvents: heroLoaded ? 'auto' : 'none' }}>
       <Nav showNavLinks />
 
       <section className={styles.hero}>
@@ -77,6 +89,8 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
                 className={styles.heroCalendarImg}
                 sizes="(max-width: 767px) 100vw, 849px"
                 priority
+                onLoad={() => setHeroLoaded(true)}
+                onError={() => setHeroLoaded(true)}
               />
             </div>
           </div>
@@ -118,6 +132,7 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
 
       <Footer />
     </div>
+    </>
   )
 }
 

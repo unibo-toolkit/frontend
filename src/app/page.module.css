@@ -5,6 +5,30 @@
   background-color: var(--bg-main);
   overflow-x: hidden;
   max-width: 100%;
+  transition: opacity 0.2s ease-out;
+}
+
+.pageLoader {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.pageLoaderSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--bg-200);
+  border-top-color: var(--fg-100);
+  border-radius: 50%;
+  animation: pageLoaderSpin 0.8s linear infinite;
+}
+
+@keyframes pageLoaderSpin {
+  to { transform: rotate(360deg); }
 }
 
 .hero {
