@@ -31,7 +31,7 @@
   font-size: var(--text-sm);
   color: var(--fg-150);
   word-break: break-all;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
 }
 
 .buttons {
@@ -54,7 +54,7 @@
   transition: background-color 0.15s;
   cursor: pointer;
   background: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   white-space: nowrap;
   height: 48px;
 }

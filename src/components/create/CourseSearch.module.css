@@ -12,7 +12,7 @@
   color: var(--fg-100);
   border: none;
   outline: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
 }
 
 .input::placeholder {
@@ -47,7 +47,7 @@
   background: none;
   border: none;
   border-bottom: 1px solid var(--border);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   transition: background-color 0.15s;
 }
 

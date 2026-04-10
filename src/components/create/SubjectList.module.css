@@ -28,7 +28,7 @@
   cursor: pointer;
   background: none;
   border: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   transition: color 0.2s;
 }
 
@@ -47,7 +47,7 @@
   left: 14px;
   width: 14px;
   height: 14px;
-  color: var(--fg-300);
+  color: var(--fg-250);
   flex-shrink: 0;
   pointer-events: none;
 }
@@ -60,12 +60,12 @@
   padding: var(--spacing-12) var(--spacing-14) var(--spacing-12) 36px;
   font-size: var(--text-base);
   color: var(--fg-100);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   outline: none;
 }
 
 .searchInput::placeholder {
-  color: var(--fg-300);
+  color: var(--fg-250);
 }
 
 .searchInput:focus {
@@ -81,7 +81,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--fg-300);
+  color: var(--fg-250);
   padding: 2px;
   transition: color 0.15s;
 }
@@ -136,7 +136,7 @@
   border-left: 3px solid var(--border);
   cursor: pointer;
   text-align: left;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   transition: background-color 0.15s;
   width: 100%;
 }
@@ -229,7 +229,7 @@
   padding: 6px var(--spacing-8);
   border-radius: var(--radius-sm);
   white-space: nowrap;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
 }
 
 @keyframes shimmer {

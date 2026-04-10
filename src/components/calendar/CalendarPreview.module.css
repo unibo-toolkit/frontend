@@ -91,7 +91,7 @@
   font-weight: 400;
   font-style: normal;
   line-height: normal;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   cursor: pointer;
   transition: opacity 0.15s;
   white-space: nowrap;
@@ -134,7 +134,7 @@
   line-height: normal;
   color: #ffffff;
   white-space: nowrap;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
 }
 
 :global([data-theme="light"]) .viewLabel {
@@ -242,7 +242,7 @@
   align-items: center;
   font-size: 10px;
   color: #a0a0a0;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   white-space: nowrap;
 }
 
@@ -254,7 +254,7 @@
   height: 40px;
   font-size: 10px;
   color: #a0a0a0;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   display: flex;
   align-items: flex-start;
   padding-top: 3px;
@@ -296,18 +296,18 @@
 .dayName {
   font-size: 10px;
   color: #a0a0a0;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
 }
 
 .dayNum {
   font-size: 10px;
   color: #ffffff;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
 }
 
 .dayNumToday {
   font-size: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   color: #ffffff;
   background: #fd585f;
   border-radius: 50%;

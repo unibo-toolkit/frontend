@@ -81,7 +81,7 @@
 }
 
 .profileName {
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-lg);
   color: var(--fg-100);
   font-weight: 400;
@@ -92,7 +92,7 @@
 }
 
 .profileEmail {
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-base);
   color: var(--fg-200);
   font-weight: 400;

@@ -52,7 +52,7 @@
   border: none;
   padding: var(--spacing-10) var(--spacing-14);
   border-radius: var(--radius-full);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-lg);
   color: var(--fg-200);
   cursor: pointer;
@@ -167,7 +167,7 @@
   color: var(--fg-100);
   border: none;
   outline: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
 }
 
 .input:disabled {
@@ -213,7 +213,7 @@
   color: #ffffff;
   border: none;
   border-radius: var(--radius-full);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-lg);
   cursor: pointer;
   white-space: nowrap;

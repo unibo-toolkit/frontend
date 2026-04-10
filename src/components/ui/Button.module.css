@@ -5,7 +5,7 @@
   gap: var(--spacing-10);
   padding: var(--spacing-16) var(--spacing-22);
   border-radius: var(--radius-full);
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-lg);
   line-height: 1;
   white-space: nowrap;

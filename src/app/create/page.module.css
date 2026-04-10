@@ -67,7 +67,7 @@
   font-size: var(--text-base);
   color: var(--fg-200);
   cursor: pointer;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='%23888' d='M0 0l6 7 6-7z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -127,7 +127,7 @@
   color: var(--fg-100);
   border: none;
   outline: none;
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
 }
 
 .nameInput::placeholder {

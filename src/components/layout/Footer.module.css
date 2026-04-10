@@ -22,7 +22,7 @@
 }
 
 .logoText {
-  font-family: var(--font-primary);
+  font-family: var(--font-primary), sans-serif;
   font-size: var(--text-2xl);
   font-weight: 400;
 }
