@@ -66,9 +66,6 @@ pids
 *.seed
 *.pid.lock
 
-# TypeScript
-*.tsbuildinfo
-
 # Turbo
 .turbo
 

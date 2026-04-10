@@ -11,8 +11,6 @@ node_modules
 # Next.js build artifacts
 .next
 out
-build
-dist
 
 # Environment files (use build args / runtime env instead)
 .env
@@ -42,7 +40,6 @@ test-results
 
 # Docs / plans
 README.md
-CHANGELOG.md
 LICENSE
 plan
 docs
