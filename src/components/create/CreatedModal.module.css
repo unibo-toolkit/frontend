@@ -1,0 +1,137 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.info {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.sectionLabel {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.linkBox {
+  background-color: var(--bg-150);
+  padding: var(--spacing-14) var(--spacing-22);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.linkText {
+  font-size: var(--text-sm);
+  color: var(--fg-150);
+  word-break: break-all;
+  font-family: var(--font-mono);
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-12);
+}
+
+.calButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-14) var(--spacing-22);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--fg-150);
+  text-decoration: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.calButton:hover {
+  background-color: var(--bg-150);
+}
+
+.signInLink {
+  color: var(--fg-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.howToSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.instructions p {
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  gap: var(--spacing-16);
+  justify-content: flex-end;
+}
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  background-color: var(--bg-200);
+  color: var(--fg-100);
+  font-size: var(--text-base);
+  padding: var(--spacing-12) var(--spacing-22);
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  white-space: nowrap;
+  animation: toastIn 0.2s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@media (max-width: 767px) {
+  .buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+[data-theme="light"] .iconDark {
+  display: none;
+}
+
+[data-theme="dark"] .iconLight {
+  display: none;
+}

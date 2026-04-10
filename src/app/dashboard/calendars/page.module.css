@@ -1,0 +1,116 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: var(--spacing-32);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.search {
+  width: 100%;
+  margin-bottom: var(--spacing-32);
+}
+
+.calendarList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.count {
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--fg-200);
+  padding-top: var(--spacing-24);
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.modalTitle {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.modalText {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--spacing-16);
+  justify-content: flex-end;
+}
+
+/* Always hide the header "+ Create calendar" ghost link — sidebar has its own Create button */
+.createLink {
+  display: none;
+}
+
+/* Mobile-only full-width primary Create button (shown below title row) */
+.mobileCreateBtn {
+  display: none;
+  width: 100%;
+  margin-bottom: var(--spacing-16);
+}
+
+/* Empty state card */
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-24);
+  padding: var(--spacing-48);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: var(--text-2xl);
+  color: var(--fg-100);
+}
+
+.emptyDesc {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+  line-height: 1.4;
+}
+
+@media (max-width: 767px) {
+  .header {
+    margin-bottom: var(--spacing-24);
+  }
+
+  .search {
+    margin-bottom: var(--spacing-24);
+  }
+
+  .title {
+    font-size: var(--text-2xl);
+  }
+
+  .mobileCreateBtn {
+    display: block;
+  }
+
+  .emptyCard {
+    padding: var(--spacing-32) var(--spacing-24);
+  }
+}

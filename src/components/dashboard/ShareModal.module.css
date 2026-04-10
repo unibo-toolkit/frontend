@@ -1,0 +1,77 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.label {
+  font-size: var(--text-base);
+  color: var(--fg-200);
+}
+
+.linkBox {
+  background-color: var(--bg-150);
+  padding: var(--spacing-14) var(--spacing-22);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.linkText {
+  font-size: var(--text-sm);
+  color: var(--fg-150);
+  word-break: break-all;
+  font-family: var(--font-mono);
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-12);
+}
+
+.calButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-14) var(--spacing-22);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--fg-150);
+  text-decoration: none;
+  transition: background-color 0.15s;
+  cursor: pointer;
+  background: none;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  height: 48px;
+}
+
+.calButton:hover {
+  background-color: var(--bg-150);
+}
+
+[data-theme="light"] .iconDark {
+  display: none;
+}
+
+[data-theme="dark"] .iconLight {
+  display: none;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}

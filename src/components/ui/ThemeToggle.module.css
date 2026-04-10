@@ -1,0 +1,25 @@
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--btn-ghost-bg);
+  border-radius: var(--radius-full);
+  width: 52px;
+  height: 48px;
+  color: var(--fg-100);
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.toggle:hover {
+  opacity: 0.8;
+}
+
+[data-theme="light"] .iconMoon {
+  display: none;
+}
+
+[data-theme="dark"] .iconSun {
+  display: none;
+}

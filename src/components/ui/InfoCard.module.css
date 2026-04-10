@@ -1,0 +1,27 @@
+.card {
+  display: flex;
+  gap: var(--spacing-12);
+  padding: var(--spacing-16) var(--spacing-22);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+.warning {
+  background-color: var(--card-yellow);
+  color: var(--fg-150);
+}
+
+.info {
+  background-color: var(--card-blue);
+  color: var(--fg-150);
+}
+
+.icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.content {
+  flex: 1;
+}
