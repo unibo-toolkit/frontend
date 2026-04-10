@@ -39,6 +39,7 @@ function refreshToken(): Promise<boolean> {
 
 async function forceLogout() {
   if (typeof window !== 'undefined') {
+    try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
     try {
       const { useAuthStore } = await import('@/stores/authStore')
       useAuthStore.getState().logout()
