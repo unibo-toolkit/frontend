@@ -14,8 +14,10 @@ function AuthContent() {
   const apiBase = process.env.NEXT_PUBLIC_API_URL || ''
 
   const handleAuth = (provider: string) => {
-    const secure = window.location.protocol === 'https:' ? ';Secure' : ''
-    document.cookie = `auth_redirect=${encodeURIComponent(redirect)};path=/;max-age=600;SameSite=Lax${secure}`
+    const isHttps = window.location.protocol === 'https:'
+    const sameSite = isHttps ? 'None' : 'Lax'
+    const secure = isHttps ? ';Secure' : ''
+    document.cookie = `auth_redirect=${encodeURIComponent(redirect)};path=/;max-age=600;SameSite=${sameSite}${secure}`
     const callbackUrl = `${window.location.origin}/api/auth/callback?provider=${provider}`
     window.location.href = `${apiBase}/api/v1/auth/${provider}?redirect_after=${encodeURIComponent(callbackUrl)}`
   }

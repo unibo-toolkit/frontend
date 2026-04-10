@@ -35,20 +35,11 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['it_IT'],
-    images: [
-      {
-        url: '/logo.png',
-        width: 512,
-        height: 512,
-        alt: 'UniPlanner',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'UniPlanner — Your university schedule, always in sync',
     description: 'Generate a personal calendar link in 30 seconds. Works with Apple Calendar, Google Calendar, and Outlook.',
-    images: ['/logo.png'],
   },
   robots: {
     index: true,
