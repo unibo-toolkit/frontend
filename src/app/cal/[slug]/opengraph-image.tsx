@@ -19,7 +19,11 @@ async function fetchCalendar(slug: string) {
 }
 
 export default async function Image({ params }: { params: { slug: string } }) {
-  const calendar = await fetchCalendar(params.slug)
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://uniplanner.it'
+  const [calendar, logoData] = await Promise.all([
+    fetchCalendar(params.slug),
+    fetch(`${siteUrl}/logo.png`).then(r => r.arrayBuffer()).catch(() => null),
+  ])
   const title = calendar?.name || 'University calendar'
   const eventCount = calendar?.total_events ?? 0
   const subjectCount = calendar?.courses?.flatMap(c => c.subjects || []).length ?? 0
@@ -39,10 +43,11 @@ export default async function Image({ params }: { params: { slug: string } }) {
           fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 32, fontWeight: 500 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: '#fd585f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 28 }}>U</span>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 36, fontWeight: 600 }}>
+          {logoData && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoData as unknown as string} width={64} height={64} alt="UniPlanner" />
+          )}
           UniPlanner
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
