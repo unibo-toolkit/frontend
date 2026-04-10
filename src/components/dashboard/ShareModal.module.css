@@ -75,3 +75,28 @@
   display: flex;
   justify-content: flex-end;
 }
+
+@media (max-width: 600px) {
+  .title {
+    font-size: var(--text-2xl);
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .calButton {
+    padding: var(--spacing-12) var(--spacing-16);
+    white-space: normal;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .footer {
+    justify-content: stretch;
+  }
+
+  .footer > * {
+    width: 100%;
+  }
+}
