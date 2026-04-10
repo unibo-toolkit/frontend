@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useRef, useCallback, useEffect, useState, Fragment } from 'react'
+import { useTranslations } from 'next-intl'
 import type { TimetableEvent } from '@/types/api'
 import type { SubjectColorPair } from '@/lib/colors'
 import EventCard from './EventCard'
@@ -96,6 +97,7 @@ export default function CalendarPreview({
   todayLabel = 'Today',
   disableNavigation = false,
 }: CalendarPreviewProps) {
+  const a11y = useTranslations('a11y')
   const outerRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState<number | null>(null)
 
@@ -171,12 +173,12 @@ export default function CalendarPreview({
               <div className={`${styles.dot} ${styles.dotGreen}`} />
             </div>
             <div className={styles.navBtnGroup}>
-              <button className={styles.navBtn} onClick={() => onWeekChange('prev')} aria-label="Previous week" disabled={disableNavigation}>
+              <button className={styles.navBtn} onClick={() => onWeekChange('prev')} aria-label={a11y('prevWeek')} disabled={disableNavigation}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M9 11L5 7L9 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
-              <button className={styles.navBtn} onClick={() => onWeekChange('next')} aria-label="Next week" disabled={disableNavigation}>
+              <button className={styles.navBtn} onClick={() => onWeekChange('next')} aria-label={a11y('nextWeek')} disabled={disableNavigation}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M5 11L9 7L5 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

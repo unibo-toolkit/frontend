@@ -18,6 +18,7 @@ export default function SettingsPage() {
   const t = useTranslations('settings')
   const dt = useTranslations('dashboard')
   const ct = useTranslations('common')
+  const a11y = useTranslations('a11y')
   const { user, setUser } = useAuthStore()
 
   const [displayName, setDisplayName] = useState('')
@@ -80,7 +81,7 @@ export default function SettingsPage() {
             <Link href="/dashboard" className={dashboardStyles.navItem}>
               <img src="/icons/home-dark.svg" width={18} height={19} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconDark}`} />
               <img src="/icons/home-light.svg" width={18} height={19} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconLight}`} />
-              Dashboard
+              {dt('dashboardLink')}
             </Link>
             <Link href="/dashboard/calendars" className={dashboardStyles.navItem}>
               <img src="/icons/calendar-dark.svg" width={16} height={17} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconDark}`} />
@@ -106,7 +107,7 @@ export default function SettingsPage() {
             <h1 className={styles.title}>{t('title')}</h1>
             <p className={styles.subtitle}>{t('subtitle')}</p>
           </div>
-          <button className={dashboardStyles.burger} onClick={() => setSidebarOpen(true)} aria-label="Menu">
+          <button className={dashboardStyles.burger} onClick={() => setSidebarOpen(true)} aria-label={a11y('menu')}>
             <span /><span /><span />
           </button>
         </div>
