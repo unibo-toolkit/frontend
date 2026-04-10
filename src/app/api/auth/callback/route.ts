@@ -3,7 +3,10 @@ import { cookies } from 'next/headers'
 import { setAuthCookies } from '@/lib/cookies'
 import { logError, logInfo } from '@/lib/logger'
 
-function detectProvider(params: URLSearchParams): string | null {
+function detectProvider(
+  params: URLSearchParams,
+  request: NextRequest,
+): string | null {
   const explicit = params.get('provider')
   if (explicit) return explicit
 
@@ -13,6 +16,13 @@ function detectProvider(params: URLSearchParams): string | null {
 
   const idToken = params.get('id_token')
   if (idToken) return 'apple'
+
+  const providerCookie = request.cookies.get('auth_provider')?.value
+  if (providerCookie === 'google' || providerCookie === 'apple') return providerCookie
+
+  const referer = request.headers.get('referer') || ''
+  if (referer.includes('appleid.apple.com')) return 'apple'
+  if (referer.includes('accounts.google.com')) return 'google'
 
   return null
 }
@@ -47,7 +57,7 @@ async function handleCallback(
 ): Promise<NextResponse> {
   const baseUrl = getBaseUrl(request)
   const code = params.get('code')
-  const provider = detectProvider(params)
+  const provider = detectProvider(params, request)
   const state = params.get('state')
   const userJson = params.get('user')
   const idToken = params.get('id_token')
@@ -136,6 +146,7 @@ async function handleCallback(
     const cookieStore = await cookies()
     setAuthCookies(cookieStore, access_token, refresh_token)
     cookieStore.delete('auth_redirect')
+    cookieStore.delete('auth_provider')
 
     logInfo('Auth callback success', { provider, redirect })
     return NextResponse.redirect(new URL(redirect, baseUrl))
