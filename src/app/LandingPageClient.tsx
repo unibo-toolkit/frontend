@@ -44,12 +44,18 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
 
   return (
     <>
-      {!heroLoaded && (
-        <div className={styles.pageLoader}>
-          <div className={styles.pageLoaderSpinner} />
-        </div>
-      )}
-    <div className={styles.page} style={{ opacity: heroLoaded ? 1 : 0, pointerEvents: heroLoaded ? 'auto' : 'none' }}>
+    <div
+      key="pageLoader"
+      className={styles.pageLoader}
+      style={{ display: heroLoaded ? 'none' : 'flex' }}
+    >
+      <div className={styles.pageLoaderSpinner} />
+    </div>
+    <div
+      key="page"
+      className={styles.page}
+      style={{ opacity: heroLoaded ? 1 : 0, pointerEvents: heroLoaded ? 'auto' : 'none' }}
+    >
       <Nav showNavLinks />
 
       <section className={styles.hero}>
