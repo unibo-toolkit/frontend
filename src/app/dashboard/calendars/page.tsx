@@ -17,6 +17,7 @@ import styles from './page.module.css'
 
 export default function CalendarsPage() {
   const t = useTranslations('dashboard')
+  const a11y = useTranslations('a11y')
   const { user } = useAuthStore()
   const { data: calendars, isLoading } = useCalendars()
   const [shareCalendar, setShareCalendar] = useState<CalendarListItem | null>(null)
@@ -60,7 +61,7 @@ export default function CalendarsPage() {
             <Link href="/dashboard" className={dashStyles.navItem}>
               <img src="/icons/home-dark.svg" width={18} height={19} alt="" className={`${dashStyles.navIcon} ${dashStyles.iconDark}`} />
               <img src="/icons/home-light.svg" width={18} height={19} alt="" className={`${dashStyles.navIcon} ${dashStyles.iconLight}`} />
-              Dashboard
+              {t('dashboardLink')}
             </Link>
             <Link href="/dashboard/calendars" className={`${dashStyles.navItem} ${dashStyles.navActive}`}>
               <img src="/icons/calendar-dark.svg" width={16} height={17} alt="" className={`${dashStyles.navIcon} ${dashStyles.iconDark}`} />
@@ -89,7 +90,7 @@ export default function CalendarsPage() {
         <div className={styles.header}>
           <h1 className={styles.title}>{t('calendars')}</h1>
           <div className={styles.headerActions}>
-            <button className={dashStyles.burger} onClick={() => setSidebarOpen(true)} aria-label="Menu">
+            <button className={dashStyles.burger} onClick={() => setSidebarOpen(true)} aria-label={a11y('menu')}>
               <span /><span /><span />
             </button>
           </div>
@@ -101,7 +102,7 @@ export default function CalendarsPage() {
 
         <div className={styles.search}>
           <Input
-            placeholder="Search calendars..."
+            placeholder={t('searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -132,7 +133,7 @@ export default function CalendarsPage() {
         )}
 
         <p className={styles.count}>
-          Showing {filtered.length} calendar(s)
+          {t('showingCalendars', { count: filtered.length })}
         </p>
       </main>
 

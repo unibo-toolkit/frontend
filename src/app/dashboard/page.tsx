@@ -17,6 +17,7 @@ import styles from './page.module.css'
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard')
+  const a11y = useTranslations('a11y')
   const { user } = useAuthStore()
   const { locale } = useLocaleStore()
   const { data: calendars, isLoading } = useCalendars()
@@ -77,7 +78,7 @@ export default function DashboardPage() {
             <Link href="/dashboard" className={`${styles.navItem} ${styles.navActive}`}>
               <img src="/icons/home-dark.svg" width={18} height={19} alt="" className={`${styles.navIcon} ${styles.iconDark}`} />
               <img src="/icons/home-light.svg" width={18} height={19} alt="" className={`${styles.navIcon} ${styles.iconLight}`} />
-              Dashboard
+              {t('dashboardLink')}
             </Link>
             <Link href="/dashboard/calendars" className={styles.navItem}>
               <img src="/icons/calendar-dark.svg" width={16} height={17} alt="" className={`${styles.navIcon} ${styles.iconDark}`} />
@@ -105,7 +106,7 @@ export default function DashboardPage() {
       <main className={styles.main}>
         <div className={styles.welcome}>
           <h1 className={styles.welcomeTitle}>{t('welcome', { name: user?.display_name || '' })}</h1>
-          <button className={styles.burger} onClick={() => setSidebarOpen(true)} aria-label="Menu">
+          <button className={styles.burger} onClick={() => setSidebarOpen(true)} aria-label={a11y('menu')}>
             <span /><span /><span />
           </button>
         </div>

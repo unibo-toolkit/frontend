@@ -1,16 +1,18 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useThemeStore } from '@/stores/themeStore'
 import styles from './ThemeToggle.module.css'
 
 export default function ThemeToggle() {
   const { toggleTheme } = useThemeStore()
+  const a11y = useTranslations('a11y')
 
   return (
     <button
       className={styles.toggle}
       onClick={toggleTheme}
-      aria-label="Toggle theme"
+      aria-label={a11y('toggleTheme')}
     >
       <svg
         width="20"

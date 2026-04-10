@@ -1,12 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useLocaleStore } from '@/stores/localeStore'
 import styles from './LanguageSwitch.module.css'
 
 export default function LanguageSwitch() {
   const { setLocale } = useLocaleStore()
   const router = useRouter()
+  const a11y = useTranslations('a11y')
 
   const handleSwitch = () => {
     const current = document.documentElement.lang
@@ -19,7 +21,7 @@ export default function LanguageSwitch() {
     <button
       className={styles.switch}
       onClick={handleSwitch}
-      aria-label="Switch language"
+      aria-label={a11y('switchLanguage')}
     >
       <span className={`${styles.label} ${styles.labelEn}`}>EN</span>
       <span className={`${styles.label} ${styles.labelIt}`}>IT</span>

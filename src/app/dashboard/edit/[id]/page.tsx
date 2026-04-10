@@ -42,6 +42,7 @@ export default function EditCalendarPage() {
   const t = useTranslations('create')
   const dt = useTranslations('dashboard')
   const et = useTranslations('errors')
+  const a11y = useTranslations('a11y')
   const { user } = useAuthStore()
   const { locale } = useLocaleStore()
   const { theme } = useThemeStore()
@@ -293,7 +294,7 @@ export default function EditCalendarPage() {
           <nav className={dashboardStyles.sidebarNav}>
             <Link href="/dashboard" className={dashboardStyles.navItem}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7L10 2L17 7V16C17 16.5304 16.7893 17.0391 16.4142 17.4142C16.0391 17.7893 15.5304 18 15 18H5C4.46957 18 3.96086 17.7893 3.58579 17.4142C3.21071 17.0391 3 16.5304 3 16V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              Dashboard
+              {dt('dashboardLink')}
             </Link>
             <Link href="/dashboard/calendars" className={`${dashboardStyles.navItem} ${dashboardStyles.navActive}`}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M3 8H17" stroke="currentColor" strokeWidth="1.5"/><path d="M7 2.5V5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M13 2.5V5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
@@ -318,13 +319,13 @@ export default function EditCalendarPage() {
 
       <main className={styles.main}>
         <div className={styles.mobileTopBar}>
-          <button className={dashboardStyles.burger} onClick={() => setSidebarOpen(true)} aria-label="Menu">
+          <button className={dashboardStyles.burger} onClick={() => setSidebarOpen(true)} aria-label={a11y('menu')}>
             <span /><span /><span />
           </button>
         </div>
         <div className={styles.breadcrumb}>
           <div className={styles.breadcrumbRow}>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard">{dt('dashboardLink')}</Link>
             <span className={styles.breadcrumbSeparator}>/</span>
           </div>
           <div className={styles.breadcrumbRow}>
@@ -332,7 +333,7 @@ export default function EditCalendarPage() {
             <span className={styles.breadcrumbSeparator}>/</span>
           </div>
           <div className={styles.breadcrumbRow}>
-            <span className={styles.breadcrumbCurrent}>Edit: {calendar?.name}</span>
+            <span className={styles.breadcrumbCurrent}>{dt('editBreadcrumb', { name: calendar?.name || '' })}</span>
           </div>
         </div>
 
@@ -340,14 +341,14 @@ export default function EditCalendarPage() {
           <svg width="28" height="28" viewBox="0 0 512 512" fill="none">
             <path d="M244 400L100 256l144-144M120 256h292" stroke="currentColor" strokeWidth="48" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Edit calendar
+          {dt('editCalendarTitle')}
         </button>
         <p className={styles.subtitle}>{courseName} &middot; {cleanCurriculumLabel(curriculumLabel)}</p>
 
         <div className={styles.content}>
           <div className={styles.formCol}>
             <div className={styles.card}>
-              <label className={styles.fieldLabel}>Calendar name</label>
+              <label className={styles.fieldLabel}>{dt('calendarNameLabel')}</label>
               <input
                 type="text"
                 className={styles.input}
@@ -359,9 +360,9 @@ export default function EditCalendarPage() {
 
             <div className={styles.card}>
               <div className={styles.subjectsHeader}>
-                <span className={styles.subjectsTitle}>Subjects</span>
+                <span className={styles.subjectsTitle}>{dt('subjectsTitle')}</span>
                 <span className={styles.subjectsCount}>
-                  {selectedSubjects.size} of {subjects?.length || 0} selected
+                  {dt('subjectsSelected', { selected: selectedSubjects.size, total: subjects?.length || 0 })}
                 </span>
               </div>
               {subjects && (
@@ -383,7 +384,7 @@ export default function EditCalendarPage() {
                 onClick={handleDelete}
                 disabled={deleteCalendar.isPending}
               >
-                {deleteCalendar.isPending ? '...' : 'Delete calendar'}
+                {deleteCalendar.isPending ? '...' : dt('deleteCalendarBtn')}
               </button>
               <Button
                 variant="primary"
@@ -391,13 +392,13 @@ export default function EditCalendarPage() {
                 disabled={updateCalendar.isPending}
                 fullWidth
               >
-                {updateCalendar.isPending ? '...' : 'Save'}
+                {updateCalendar.isPending ? '...' : dt('saveBtn')}
               </Button>
             </div>
           </div>
 
           <div className={styles.previewCol}>
-            <span className={styles.previewLabel}>Preview of calendar</span>
+            <span className={styles.previewLabel}>{dt('previewLabel')}</span>
             <CalendarPreview
               events={weekEvents}
               subjectColors={selectedSubjectColors}
@@ -412,7 +413,7 @@ export default function EditCalendarPage() {
             />
 
             <div className={styles.card}>
-              <span className={styles.icsSectionLabel}>Your .ics link</span>
+              <span className={styles.icsSectionLabel}>{dt('icsLinkLabel')}</span>
               <div className={styles.icsUrl}>{icsUrl}</div>
 
               <div className={styles.divider} />
@@ -420,27 +421,27 @@ export default function EditCalendarPage() {
               <a href={webcalUrl} className={styles.calButton}>
                 <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
                 <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
-                Add to Apple Calendar
+                {dt('addToApple')}
               </a>
               <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={styles.calButton}>
                 <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
                 <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
-                Add to Google Calendar
+                {dt('addToGoogle')}
               </a>
 
               <div className={styles.divider} />
 
               <div className={styles.stats}>
                 <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Events</span>
+                  <span className={styles.statLabel}>{dt('eventsLabel')}</span>
                   <span className={styles.statValue}>{totalEvents}</span>
                 </div>
                 <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Last sync</span>
+                  <span className={styles.statLabel}>{dt('lastSyncLabel')}</span>
                   <span className={styles.statValue}>{lastSync}</span>
                 </div>
                 <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Expires</span>
+                  <span className={styles.statLabel}>{dt('expiresLabel')}</span>
                   <span className={styles.statValue}>{expires}</span>
                 </div>
               </div>

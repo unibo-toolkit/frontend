@@ -14,6 +14,7 @@ import styles from './Nav.module.css'
 
 export default function Nav({ showNavLinks = true }: { showNavLinks?: boolean }) {
   const t = useTranslations('nav')
+  const a11y = useTranslations('a11y')
   const { isLoggedIn, user } = useAuthStore()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -46,7 +47,7 @@ export default function Nav({ showNavLinks = true }: { showNavLinks?: boolean })
       <button
         className={styles.burger}
         onClick={() => setMobileMenuOpen(true)}
-        aria-label="Open menu"
+        aria-label={a11y('openMenu')}
       >
         <span />
         <span />
