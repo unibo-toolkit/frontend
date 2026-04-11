@@ -34,12 +34,3 @@ export function getSubjectColorPair(index: number, isDark: boolean): SubjectColo
   const arr = isDark ? DARK_COLOR_PAIRS : LIGHT_COLOR_PAIRS
   return arr[index % arr.length]
 }
-
-// Legacy single-color API (dark theme accent colors)
-const SUBJECT_COLORS = DARK_COLOR_PAIRS.map((p) => p.border)
-
-export function getSubjectColor(index: number): string {
-  return SUBJECT_COLORS[index % SUBJECT_COLORS.length]
-}
-
-export { SUBJECT_COLORS }

@@ -1,20 +1,23 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { useLocaleStore } from '@/stores/localeStore'
+import { useTransition } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { usePathname, useRouter } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
 import styles from './LanguageSwitch.module.css'
 
 export default function LanguageSwitch() {
-  const { setLocale } = useLocaleStore()
+  const locale = useLocale() as Locale
   const router = useRouter()
+  const pathname = usePathname()
   const a11y = useTranslations('a11y')
+  const [, startTransition] = useTransition()
 
   const handleSwitch = () => {
-    const current = document.documentElement.lang
-    const next = current === 'en' ? 'it' : 'en'
-    setLocale(next)
-    router.refresh()
+    const next: Locale = locale === 'en' ? 'it' : 'en'
+    startTransition(() => {
+      router.replace(pathname, { locale: next })
+    })
   }
 
   return (

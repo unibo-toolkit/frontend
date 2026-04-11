@@ -70,10 +70,6 @@ export function broadcastLogout() {
   try { authChannel?.postMessage('logout') } catch {}
 }
 
-export function broadcastLogin() {
-  try { authChannel?.postMessage('login') } catch {}
-}
-
 export function destroyAuthChannel() {
   try { authChannel?.close() } catch {}
   authChannel = null

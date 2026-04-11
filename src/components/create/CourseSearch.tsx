@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchCourses } from '@/hooks/useCourses'
-import { useLocaleStore } from '@/stores/localeStore'
+import { useLocale } from 'next-intl'
 import type { Course } from '@/types/calendar'
 import styles from './CourseSearch.module.css'
 
@@ -51,7 +51,7 @@ function normalizeCampus(campus: string | undefined): string | null {
 
 export default function CourseSearch({ onSelect, selectedCourse }: CourseSearchProps) {
   const t = useTranslations('create')
-  const { locale } = useLocaleStore()
+  const locale = useLocale()
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)

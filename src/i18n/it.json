@@ -1,7 +1,6 @@
 {
   "nav": {
     "features": "Funzionalità",
-    "howItWorks": "Come funziona",
     "login": "Accedi",
     "create": "Crea il mio calendario",
     "profile": "Profilo",
@@ -32,9 +31,6 @@
     "autoUpdateDesc": "Il tuo calendario riflette sempre orario dal sito del tuo corso di UniBo",
     "filter": "Filtra per materia e gruppo.",
     "filterDesc": "Scegli esattamente quali materie includere. Niente confusione",
-    "multiCourse": "Supporto multi-corso.",
-    "multiCourseDesc": "Combina materie di più corsi o anni in un unico link calendario",
-    "requiresAccount": "(richiede account)",
     "anyCalendar": "Funziona con qualsiasi calendario.",
     "anyCalendarDesc": "Apple Calendar, Google Calendar, Microsoft Outlook, Thunderbird — tutto ciò che supporta .ics",
     "noAccount": "Nessun account necessario.",
@@ -84,7 +80,6 @@
     "module": "Modulo",
     "group": "Gruppo",
     "preview": "Anteprima del calendario",
-    "noSubjects": "Seleziona le materie per vedere l'anteprima",
     "createButton": "Crea il mio calendario",
     "calendarName": "Nome calendario (opzionale)",
     "calendarNamePlaceholder": "Il mio calendario",
@@ -209,12 +204,10 @@
   },
   "common": {
     "copied": "Copiato!",
-    "loading": "Caricamento...",
     "save": "Salva",
     "cancel": "Annulla",
     "delete": "Elimina",
     "confirm": "Conferma",
-    "close": "Chiudi",
     "done": "Fatto"
   },
   "a11y": {
@@ -225,6 +218,66 @@
     "switchLanguage": "Cambia lingua",
     "prevWeek": "Settimana precedente",
     "nextWeek": "Settimana successiva"
+  },
+  "meta": {
+    "landing": {
+      "title": "UniPlanner — Il tuo orario universitario sempre sincronizzato",
+      "description": "Genera un link calendario personale per il tuo orario dell'Università di Bologna. Funziona con Apple Calendar, Google Calendar e Outlook — si aggiorna automaticamente.",
+      "keywords": [
+        "orario universitario",
+        "UniBO",
+        "Università di Bologna",
+        "calendario lezioni",
+        "sincronizzazione orario",
+        "calendario studenti",
+        "ICS calendario",
+        "orario UniBO"
+      ]
+    },
+    "create": {
+      "title": "Crea il tuo calendario — UniPlanner",
+      "description": "Crea il tuo calendario personale dell'Università di Bologna in 30 secondi. Scegli il corso di laurea, le materie e ottieni un link .ics che si sincronizza per sempre.",
+      "keywords": [
+        "crea calendario",
+        "calendario UniBO",
+        "orario corsi",
+        "link ICS",
+        "generatore orario universitario"
+      ]
+    },
+    "auth": {
+      "title": "Accedi — UniPlanner",
+      "description": "Accedi a UniPlanner per gestire i tuoi calendari dell'Università di Bologna da qualsiasi dispositivo."
+    },
+    "dashboard": {
+      "title": "Dashboard — UniPlanner",
+      "description": "Gestisci i tuoi calendari salvati dell'Università di Bologna, visualizza statistiche e condividi link."
+    },
+    "settings": {
+      "title": "Impostazioni — UniPlanner",
+      "description": "Gestisci il tuo account UniPlanner, profilo e preferenze."
+    },
+    "calendars": {
+      "title": "I miei calendari — UniPlanner",
+      "description": "Sfoglia, modifica e condividi tutti i tuoi calendari dell'Università di Bologna."
+    },
+    "edit": {
+      "title": "Modifica calendario — UniPlanner",
+      "description": "Modifica il tuo calendario dell'Università di Bologna — cambia materie, rinomina o elimina."
+    },
+    "privacy": {
+      "title": "Informativa sulla privacy — UniPlanner",
+      "description": "Come UniPlanner raccoglie, usa e protegge i tuoi dati. Informativa sulla privacy conforme al GDPR."
+    },
+    "terms": {
+      "title": "Termini di servizio — UniPlanner",
+      "description": "Termini di servizio per l'uso di UniPlanner — uno strumento gratuito di calendario per gli studenti dell'Università di Bologna."
+    },
+    "calendar": {
+      "titleTemplate": "{name} — UniPlanner",
+      "descriptionTemplate": "{name} — {events} eventi. Aggiungi a Apple Calendar, Google Calendar o Outlook.",
+      "fallbackName": "Calendario universitario"
+    }
   },
   "privacy": {
     "title": "Informativa sulla Privacy",

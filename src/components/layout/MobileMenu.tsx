@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '@/stores/authStore'
@@ -13,10 +13,9 @@ import styles from './MobileMenu.module.css'
 interface MobileMenuProps {
   isOpen: boolean
   onClose: () => void
-  showNavLinks?: boolean
 }
 
-export default function MobileMenu({ isOpen, onClose, showNavLinks = true }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const t = useTranslations('nav')
   const a11y = useTranslations('a11y')
   const { isLoggedIn } = useAuthStore()
