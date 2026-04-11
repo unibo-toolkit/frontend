@@ -1,7 +1,6 @@
 {
   "nav": {
     "features": "Features",
-    "howItWorks": "How It Works",
     "login": "Log in",
     "create": "Create my calendar",
     "profile": "Profile",
@@ -32,9 +31,6 @@
     "autoUpdateDesc": "Your calendar always reflects the latest timetable from UniBo",
     "filter": "Filter by subject & group.",
     "filterDesc": "Choose exactly which subjects and class groups to include. No clutter",
-    "multiCourse": "Multi-course support.",
-    "multiCourseDesc": "Combine subjects from multiple degrees or years into a single calendar link",
-    "requiresAccount": "(requires account)",
     "anyCalendar": "Works with any calendar.",
     "anyCalendarDesc": "Apple Calendar, Google Calendar, Microsoft Outlook, Thunderbird — anything that supports .ics",
     "noAccount": "No account required.",
@@ -84,7 +80,6 @@
     "module": "Module",
     "group": "Group",
     "preview": "Preview of calendar",
-    "noSubjects": "Select subjects to see preview",
     "createButton": "Create my calendar",
     "calendarName": "Calendar name (optional)",
     "calendarNamePlaceholder": "My Calendar",
@@ -209,12 +204,10 @@
   },
   "common": {
     "copied": "Copied!",
-    "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
     "confirm": "Confirm",
-    "close": "Close",
     "done": "Done"
   },
   "a11y": {
@@ -225,6 +218,66 @@
     "switchLanguage": "Switch language",
     "prevWeek": "Previous week",
     "nextWeek": "Next week"
+  },
+  "meta": {
+    "landing": {
+      "title": "UniPlanner — Your university schedule, always in sync",
+      "description": "Generate a personal calendar link for your University of Bologna schedule. Works with Apple Calendar, Google Calendar, and Outlook — updates automatically.",
+      "keywords": [
+        "university schedule",
+        "UniBO",
+        "calendar sync",
+        "timetable",
+        "University of Bologna",
+        "student calendar",
+        "ICS calendar",
+        "orario universitario"
+      ]
+    },
+    "create": {
+      "title": "Create your calendar — UniPlanner",
+      "description": "Build your personal University of Bologna calendar in 30 seconds. Pick your degree, choose subjects, and get an .ics link that syncs forever.",
+      "keywords": [
+        "create calendar",
+        "UniBO calendar",
+        "course schedule",
+        "ICS link",
+        "timetable generator"
+      ]
+    },
+    "auth": {
+      "title": "Sign in — UniPlanner",
+      "description": "Sign in to UniPlanner to manage your University of Bologna calendars from any device."
+    },
+    "dashboard": {
+      "title": "Dashboard — UniPlanner",
+      "description": "Manage your saved University of Bologna calendars, view stats, and share links."
+    },
+    "settings": {
+      "title": "Settings — UniPlanner",
+      "description": "Manage your UniPlanner account, profile, and preferences."
+    },
+    "calendars": {
+      "title": "My Calendars — UniPlanner",
+      "description": "Browse, edit, and share all your University of Bologna calendars."
+    },
+    "edit": {
+      "title": "Edit calendar — UniPlanner",
+      "description": "Edit your University of Bologna calendar — change subjects, rename, or delete."
+    },
+    "privacy": {
+      "title": "Privacy Policy — UniPlanner",
+      "description": "How UniPlanner collects, uses, and protects your data. GDPR-compliant privacy policy."
+    },
+    "terms": {
+      "title": "Terms of Service — UniPlanner",
+      "description": "Terms of service for using UniPlanner — a free calendar tool for University of Bologna students."
+    },
+    "calendar": {
+      "titleTemplate": "{name} — UniPlanner",
+      "descriptionTemplate": "{name} — {events} events. Add to Apple Calendar, Google Calendar, or Outlook.",
+      "fallbackName": "University calendar"
+    }
   },
   "privacy": {
     "title": "Privacy Policy",

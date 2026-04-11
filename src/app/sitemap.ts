@@ -1,40 +1,29 @@
 import type { MetadataRoute } from 'next'
+import { routing } from '@/i18n/routing'
+import { localeUrl, alternateLanguages } from '@/i18n/urls'
 
-const BASE = 'https://uniplanner.it'
+interface PageDef {
+  path: string
+  changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+  priority: number
+}
+
+const PAGES: PageDef[] = [
+  { path: '', changeFrequency: 'weekly', priority: 1.0 },
+  { path: '/create', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/privacy', changeFrequency: 'monthly', priority: 0.3 },
+  { path: '/terms', changeFrequency: 'monthly', priority: 0.3 },
+]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date()
-
-  return [
-    {
-      url: BASE,
+  return PAGES.flatMap(({ path, changeFrequency, priority }) =>
+    routing.locales.map((locale) => ({
+      url: localeUrl(locale, path),
       lastModified,
-      changeFrequency: 'weekly',
-      priority: 1,
-      alternates: {
-        languages: {
-          en: `${BASE}`,
-          it: `${BASE}`,
-        },
-      },
-    },
-    {
-      url: `${BASE}/create`,
-      lastModified,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${BASE}/privacy`,
-      lastModified,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${BASE}/terms`,
-      lastModified,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-  ]
+      changeFrequency,
+      priority,
+      alternates: { languages: alternateLanguages(path) },
+    })),
+  )
 }

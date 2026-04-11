@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import { useAuthStore } from '@/stores/authStore'
 import { performLogout } from '@/hooks/useAuth'
@@ -12,10 +12,10 @@ import MobileMenu from './MobileMenu'
 import { useTranslations } from 'next-intl'
 import styles from './Nav.module.css'
 
-export default function Nav({ showNavLinks = true }: { showNavLinks?: boolean }) {
+export default function Nav() {
   const t = useTranslations('nav')
   const a11y = useTranslations('a11y')
-  const { isLoggedIn, user } = useAuthStore()
+  const { user } = useAuthStore()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -93,7 +93,6 @@ export default function Nav({ showNavLinks = true }: { showNavLinks?: boolean })
       <MobileMenu
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
-        showNavLinks={false}
       />
     </nav>
   )

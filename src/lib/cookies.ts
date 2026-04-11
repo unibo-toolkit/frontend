@@ -7,16 +7,6 @@ function isValidToken(token: string): boolean {
   return typeof token === 'string' && token.trim().length > 0
 }
 
-export async function getAccessToken(): Promise<string | undefined> {
-  const cookieStore = await cookies()
-  return cookieStore.get(COOKIE_ACCESS_TOKEN)?.value
-}
-
-export async function getRefreshToken(): Promise<string | undefined> {
-  const cookieStore = await cookies()
-  return cookieStore.get(COOKIE_REFRESH_TOKEN)?.value
-}
-
 export function setAuthCookies(
   cookieStore: Awaited<ReturnType<typeof cookies>>,
   accessToken: string,

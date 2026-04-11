@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState, useEffect, ReactNode } from 'react'
 import { initializeTheme } from '@/stores/themeStore'
-import { initializeLocale } from '@/stores/localeStore'
 import { useAuth } from '@/hooks/useAuth'
 
 function AuthGate({ children, hasAuth }: { children: ReactNode; hasAuth?: boolean }) {
@@ -55,7 +54,6 @@ export default function Providers({ children, hasAuth }: ProvidersProps) {
 
   useEffect(() => {
     initializeTheme()
-    initializeLocale()
   }, [])
 
   return (
