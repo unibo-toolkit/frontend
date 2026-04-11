@@ -293,15 +293,18 @@ export default function EditCalendarPage() {
           </div>
           <nav className={dashboardStyles.sidebarNav}>
             <Link href="/dashboard" className={dashboardStyles.navItem}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7L10 2L17 7V16C17 16.5304 16.7893 17.0391 16.4142 17.4142C16.0391 17.7893 15.5304 18 15 18H5C4.46957 18 3.96086 17.7893 3.58579 17.4142C3.21071 17.0391 3 16.5304 3 16V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <img src="/icons/home-dark.svg" width={18} height={19} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconDark}`} />
+              <img src="/icons/home-light.svg" width={18} height={19} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconLight}`} />
               {dt('dashboardLink')}
             </Link>
             <Link href="/dashboard/calendars" className={`${dashboardStyles.navItem} ${dashboardStyles.navActive}`}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M3 8H17" stroke="currentColor" strokeWidth="1.5"/><path d="M7 2.5V5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M13 2.5V5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <img src="/icons/calendar-dark.svg" width={16} height={17} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconDark}`} />
+              <img src="/icons/calendar-light.svg" width={16} height={17} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconLight}`} />
               {dt('myCalendar')}
             </Link>
             <Link href="/dashboard/settings" className={dashboardStyles.navItem}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5"/><path d="M10 1.5V3.5M10 16.5V18.5M18.5 10H16.5M3.5 10H1.5M16.01 3.99L14.6 5.4M5.4 14.6L3.99 16.01M16.01 16.01L14.6 14.6M5.4 5.4L3.99 3.99" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <img src="/icons/settings-dark.svg" width={19} height={18} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconDark}`} />
+              <img src="/icons/settings-light.svg" width={19} height={18} alt="" className={`${dashboardStyles.navIcon} ${dashboardStyles.iconLight}`} />
               {dt('settings')}
             </Link>
           </nav>
