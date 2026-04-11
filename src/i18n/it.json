@@ -8,7 +8,7 @@
   },
   "hero": {
     "badge": "✦  Creato per gli studenti UniBo",
-    "title": "Il tuo orario universitario, sempre sincronizzato",
+    "title": "Il tuo orario UniBO, sempre sincronizzato",
     "subtitle": "Genera un link calendario personale in 30 secondi. Aggiungilo ad Apple Calendar o Google Calendar — il tuo orario si aggiorna automaticamente.",
     "noAccount": "Nessun account necessario · Gratuito · Funziona con qualsiasi app calendario",
     "seeHow": "Scopri come funziona",
@@ -221,7 +221,7 @@
   },
   "meta": {
     "landing": {
-      "title": "UniPlanner — Il tuo orario universitario sempre sincronizzato",
+      "title": "UniPlanner — Il tuo orario UniBO sempre sincronizzato",
       "description": "Genera un link calendario personale per il tuo orario dell'Università di Bologna. Funziona con Apple Calendar, Google Calendar e Outlook — si aggiorna automaticamente.",
       "keywords": [
         "orario universitario",
