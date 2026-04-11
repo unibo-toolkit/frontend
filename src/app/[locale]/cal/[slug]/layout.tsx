@@ -28,13 +28,14 @@ export async function generateMetadata({ params }: Props) {
   const calendar = await fetchCalendar(slug)
 
   if (!calendar) {
+    const tErr = await getTranslations({ locale, namespace: 'errors' })
     return buildPageMetadata({
       locale,
       namespace: 'errors',
       path: `/cal/${slug}`,
       noindex: true,
-      titleOverride: 'Calendar not found',
-      descriptionOverride: 'This calendar does not exist or has been deleted.',
+      titleOverride: tErr('calendarNotFound'),
+      descriptionOverride: tErr('calendarNotFoundDesc'),
     })
   }
 
