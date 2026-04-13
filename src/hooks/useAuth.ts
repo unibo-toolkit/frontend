@@ -3,10 +3,12 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { startBackgroundRefresh, stopBackgroundRefresh, initAuthChannel, broadcastLogout, destroyAuthChannel } from '@/lib/auth'
+import { markLogoutInProgress } from '@/lib/api'
 import api from '@/lib/api'
 import type { User } from '@/types/auth'
 
 export async function performLogout() {
+  markLogoutInProgress()
   stopBackgroundRefresh()
   try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
   useAuthStore.getState().logout()
@@ -19,6 +21,7 @@ export function useAuth(enabled = true) {
   const [authReady, setAuthReady] = useState(!enabled)
 
   const handleAuthFailure = useCallback(async () => {
+    markLogoutInProgress()
     stopBackgroundRefresh()
     try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
     logout()
