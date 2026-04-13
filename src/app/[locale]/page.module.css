@@ -556,7 +556,6 @@
 
   .card {
     width: 535px;
-    height: 700px;
     flex-shrink: 0;
     scroll-snap-align: start;
   }
@@ -750,7 +749,7 @@
   .card {
     width: 100%;
     min-width: auto;
-    height: 565px;
+    aspect-ratio: 535 / 565;
     flex-shrink: 0;
   }
 
