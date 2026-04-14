@@ -27,6 +27,13 @@
   border-radius: 3px;
 }
 
+img.emoji {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  vertical-align: -0.15em;
+}
+
 *::-webkit-scrollbar-thumb:hover {
   background: var(--border);
 }
