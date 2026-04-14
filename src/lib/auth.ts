@@ -1,10 +1,11 @@
+import { refreshToken } from './api'
+
 let refreshInterval: ReturnType<typeof setInterval> | null = null
 let authChannel: BroadcastChannel | null = null
 let consecutiveFailures = 0
 
 const REFRESH_INTERVAL = 8 * 60 * 1000
 const MAX_CONSECUTIVE_FAILURES = 5
-const REFRESH_TIMEOUT = 10_000
 
 export function startBackgroundRefresh(onAuthFailure?: () => void) {
   stopBackgroundRefresh()
@@ -12,20 +13,9 @@ export function startBackgroundRefresh(onAuthFailure?: () => void) {
 
   refreshInterval = setInterval(async () => {
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), REFRESH_TIMEOUT)
-
-      const res = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        signal: controller.signal,
-      })
-      clearTimeout(timeoutId)
-
-      if (res.ok) {
+      const ok = await refreshToken()
+      if (ok) {
         consecutiveFailures = 0
-      } else if (res.status === 401 || res.status === 403) {
-        stopBackgroundRefresh()
-        onAuthFailure?.()
       } else {
         consecutiveFailures++
         if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
@@ -57,11 +47,7 @@ export function initAuthChannel(onLogout: () => void, onLogin?: () => void) {
     authChannel = new BroadcastChannel('auth')
     authChannel.onmessage = (event) => {
       if (event.data === 'logout') onLogout()
-      if (event.data === 'login') {
-        if (onLogin) {
-          onLogin()
-        }
-      }
+      if (event.data === 'login' && onLogin) onLogin()
     }
   } catch {}
 }

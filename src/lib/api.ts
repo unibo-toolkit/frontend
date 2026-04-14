@@ -9,13 +9,31 @@ const api = axios.create({
   },
 })
 
-let isRefreshing = false
-let refreshPromise: Promise<boolean> | null = null
+const REFRESH_TIMEOUT = 10_000
+const FRESH_TTL = 5_000
+const LS_KEY = 'auth_last_refresh'
 
-async function doRefresh(): Promise<boolean> {
+let pendingRefresh: Promise<boolean> | null = null
+let logoutInProgress = false
+
+function getLastRefreshTime(): number {
+  try {
+    return parseInt(localStorage.getItem(LS_KEY) || '0', 10)
+  } catch {
+    return 0
+  }
+}
+
+function setLastRefreshTime() {
+  try {
+    localStorage.setItem(LS_KEY, Date.now().toString())
+  } catch {}
+}
+
+async function doRefreshFetch(): Promise<boolean> {
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10_000)
+    const timeoutId = setTimeout(() => controller.abort(), REFRESH_TIMEOUT)
     const res = await fetch('/api/auth/refresh', {
       method: 'POST',
       signal: controller.signal,
@@ -27,18 +45,45 @@ async function doRefresh(): Promise<boolean> {
   }
 }
 
-function refreshToken(): Promise<boolean> {
-  if (isRefreshing && refreshPromise) return refreshPromise
-  isRefreshing = true
-  refreshPromise = doRefresh().finally(() => {
-    isRefreshing = false
-    refreshPromise = null
+async function refreshIfNeeded(): Promise<boolean> {
+  if (Date.now() - getLastRefreshTime() < FRESH_TTL) return true
+
+  const ok = await doRefreshFetch()
+  if (ok) setLastRefreshTime()
+  return ok
+}
+
+async function refreshWithLock(): Promise<boolean> {
+  if (typeof navigator !== 'undefined' && navigator.locks) {
+    return navigator.locks.request('auth-refresh', async () => {
+      return refreshIfNeeded()
+    })
+  }
+  return refreshIfNeeded()
+}
+
+export function refreshToken(): Promise<boolean> {
+  if (logoutInProgress) return Promise.resolve(false)
+  if (pendingRefresh) return pendingRefresh
+
+  pendingRefresh = refreshWithLock().finally(() => {
+    pendingRefresh = null
   })
-  return refreshPromise
+
+  return pendingRefresh
+}
+
+export function markLogoutInProgress() {
+  logoutInProgress = true
+}
+
+export function clearLogoutFlag() {
+  logoutInProgress = false
 }
 
 async function forceLogout() {
   if (typeof window !== 'undefined') {
+    markLogoutInProgress()
     try { await fetch('/api/auth/logout', { method: 'POST' }) } catch {}
     try {
       const { useAuthStore } = await import('@/stores/authStore')
