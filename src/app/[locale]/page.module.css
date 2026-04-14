@@ -749,7 +749,8 @@
   .card {
     width: 100%;
     min-width: auto;
-    aspect-ratio: 535 / 565;
+    aspect-ratio: unset;
+    height: 565px;
     flex-shrink: 0;
   }
 

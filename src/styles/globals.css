@@ -8,6 +8,29 @@
   padding: 0;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-200) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--bg-200);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
 :root {
   --font-primary: 'Inter Display', sans-serif;
   --font-mono: 'Suisse Intl', sans-serif;
