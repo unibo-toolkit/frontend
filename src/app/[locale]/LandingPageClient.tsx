@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
 import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
@@ -16,7 +16,19 @@ function formatCount(n: number): string {
   return n.toLocaleString()
 }
 
-export default function LandingPageClient({ initialTheme }: { initialTheme: 'dark' | 'light' }) {
+function heroSrc(theme: 'dark' | 'light', locale: Locale): string {
+  const suffix = locale === 'it' ? '-it' : ''
+  return theme === 'light'
+    ? `/images/hero-calendar-light${suffix}.webp`
+    : `/images/hero-calendar${suffix}.webp`
+}
+
+function cardSrc(name: string, theme: 'dark' | 'light'): string {
+  const variant = theme === 'light' ? `${name}-light` : name
+  return `/images/${variant}.webp`
+}
+
+export default function LandingPageClient({ initialTheme, locale }: { initialTheme: 'dark' | 'light'; locale: Locale }) {
   const t = useTranslations()
   const { data: stats } = usePublicStats()
   const [theme, setTheme] = useState<'dark' | 'light'>(initialTheme)
@@ -87,14 +99,12 @@ export default function LandingPageClient({ initialTheme }: { initialTheme: 'dar
               </span>
             </div>
             <div className={styles.heroCalendarWrap}>
-              <Image
-                src={theme === 'light' ? '/images/hero-calendar-light.png' : '/images/hero-calendar.png'}
+              <img
+                src={heroSrc(theme, locale)}
                 alt="Calendar preview"
                 width={849}
                 height={732}
                 className={styles.heroCalendarImg}
-                sizes="(max-width: 767px) 100vw, 849px"
-                priority
                 onLoad={() => setHeroLoaded(true)}
                 onError={() => setHeroLoaded(true)}
               />
@@ -339,8 +349,8 @@ function HowItWorks({ t, theme }: { t: ReturnType<typeof useTranslations>; theme
               <p className={styles.cardDesc}>{t('howItWorks.step1Desc')}</p>
             </div>
             <div className={`${styles.cardImageWrap} ${styles.cardImageWrapRed}`}>
-              <Image
-                src={theme === 'light' ? '/images/card-course-light.png' : '/images/card-course.png'}
+              <img
+                src={cardSrc('card-course', theme)}
                 alt=""
                 width={580}
                 height={749}
@@ -360,8 +370,8 @@ function HowItWorks({ t, theme }: { t: ReturnType<typeof useTranslations>; theme
               <p className={styles.cardDesc}>{t('howItWorks.step2Desc')}</p>
             </div>
             <div className={styles.cardImageWrap}>
-              <Image
-                src={theme === 'light' ? '/images/card-link-light.png' : '/images/card-link.png'}
+              <img
+                src={cardSrc('card-link', theme)}
                 alt=""
                 width={580}
                 height={749}
@@ -381,8 +391,8 @@ function HowItWorks({ t, theme }: { t: ReturnType<typeof useTranslations>; theme
               <p className={styles.cardDesc}>{t('howItWorks.step3Desc')}</p>
             </div>
             <div className={`${styles.cardImageWrap} ${styles.cardImageWrapPurple}`}>
-              <Image
-                src={theme === 'light' ? '/images/card-sync-light.png' : '/images/card-sync.png'}
+              <img
+                src={cardSrc('card-sync', theme)}
                 alt=""
                 width={580}
                 height={749}
