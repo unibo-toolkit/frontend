@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useSearchCourses } from '@/hooks/useCourses'
-import { useLocale } from 'next-intl'
+import Twemoji from '@/components/ui/Twemoji'
 import type { Course } from '@/types/calendar'
 import styles from './CourseSearch.module.css'
 
@@ -121,7 +121,7 @@ export default function CourseSearch({ onSelect, selectedCourse }: CourseSearchP
                   }}
                 >
                   <span className={styles.courseTitle}>{course.title}</span>
-                  {metaLine && <span className={styles.courseMeta}>{metaLine}</span>}
+                  {metaLine && <Twemoji className={styles.courseMeta}>{metaLine}</Twemoji>}
                   {course.area && <span className={styles.courseArea}>{course.area}</span>}
                 </button>
               )
