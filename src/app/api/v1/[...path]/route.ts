@@ -32,6 +32,30 @@ async function fetchWithRetry(
   throw lastError
 }
 
+const FORWARD_HEADERS = [
+  'user-agent',
+  'accept-language',
+  'cf-connecting-ip',
+  'cf-ipcountry',
+  'cf-ray',
+  'x-forwarded-for',
+  'x-forwarded-proto',
+  'x-forwarded-host',
+  'x-real-ip',
+  'true-client-ip',
+  'referer',
+]
+
+function buildClientIp(request: NextRequest): string | null {
+  const cfIp = request.headers.get('cf-connecting-ip')
+  if (cfIp) return cfIp
+  const xff = request.headers.get('x-forwarded-for')
+  if (xff) return xff.split(',')[0].trim()
+  const xri = request.headers.get('x-real-ip')
+  if (xri) return xri
+  return null
+}
+
 async function proxyRequest(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   const targetUrl = `${API_URL}${pathname}${search}`
@@ -39,17 +63,24 @@ async function proxyRequest(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value
 
   const headers = new Headers()
-  headers.set('Content-Type', request.headers.get('Content-Type') || 'application/json')
-  headers.set('Accept', request.headers.get('Accept') || 'application/json')
+  headers.set('content-type', request.headers.get('content-type') || 'application/json')
+  headers.set('accept', request.headers.get('accept') || 'application/json')
 
-  const userAgent = request.headers.get('User-Agent')
-  if (userAgent) headers.set('User-Agent', userAgent)
+  for (const name of FORWARD_HEADERS) {
+    const value = request.headers.get(name)
+    if (value) headers.set(name, value)
+  }
 
-  const acceptLanguage = request.headers.get('Accept-Language')
-  if (acceptLanguage) headers.set('Accept-Language', acceptLanguage)
+  const clientIp = buildClientIp(request)
+  if (clientIp && !headers.has('cf-connecting-ip')) {
+    headers.set('cf-connecting-ip', clientIp)
+  }
+  if (clientIp && !headers.has('x-forwarded-for')) {
+    headers.set('x-forwarded-for', clientIp)
+  }
 
   if (accessToken) {
-    headers.set('Authorization', `Bearer ${accessToken}`)
+    headers.set('authorization', `Bearer ${accessToken}`)
   }
 
   const method = request.method
