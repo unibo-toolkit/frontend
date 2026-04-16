@@ -1,18 +1,21 @@
 import { hasLocale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
+import { headers } from 'next/headers'
 import { routing, type Locale } from '@/i18n/routing'
 import { buildPageMetadata } from '@/i18n/metadata'
+import { buildForwardedHeaders } from '@/lib/forwardHeaders'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
   children: React.ReactNode
 }
 
-async function fetchCalendar(slug: string) {
+async function fetchCalendar(slug: string, reqHeaders: Headers) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://uniplanner.it'
   try {
     const res = await fetch(`${apiUrl}/api/v1/calendars/public/${slug}`, {
       next: { revalidate: 300 },
+      headers: buildForwardedHeaders(reqHeaders),
     })
     if (!res.ok) return null
     return (await res.json()) as { name: string; total_events?: number }
@@ -25,7 +28,8 @@ export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params
   if (!hasLocale(routing.locales, locale)) return {}
 
-  const calendar = await fetchCalendar(slug)
+  const reqHeaders = await headers()
+  const calendar = await fetchCalendar(slug, reqHeaders)
 
   if (!calendar) {
     const tErr = await getTranslations({ locale, namespace: 'errors' })

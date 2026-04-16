@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logError } from '@/lib/logger'
+import { buildForwardedHeaders } from '@/lib/forwardHeaders'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || ''
 const PROXY_TIMEOUT = 15_000
@@ -32,52 +33,16 @@ async function fetchWithRetry(
   throw lastError
 }
 
-const FORWARD_HEADERS = [
-  'user-agent',
-  'accept-language',
-  'cf-connecting-ip',
-  'cf-ipcountry',
-  'cf-ray',
-  'x-forwarded-for',
-  'x-forwarded-proto',
-  'x-forwarded-host',
-  'x-real-ip',
-  'true-client-ip',
-  'referer',
-]
-
-function buildClientIp(request: NextRequest): string | null {
-  const cfIp = request.headers.get('cf-connecting-ip')
-  if (cfIp) return cfIp
-  const xff = request.headers.get('x-forwarded-for')
-  if (xff) return xff.split(',')[0].trim()
-  const xri = request.headers.get('x-real-ip')
-  if (xri) return xri
-  return null
-}
-
 async function proxyRequest(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   const targetUrl = `${API_URL}${pathname}${search}`
 
   const accessToken = request.cookies.get('access_token')?.value
 
-  const headers = new Headers()
-  headers.set('content-type', request.headers.get('content-type') || 'application/json')
-  headers.set('accept', request.headers.get('accept') || 'application/json')
-
-  for (const name of FORWARD_HEADERS) {
-    const value = request.headers.get(name)
-    if (value) headers.set(name, value)
-  }
-
-  const clientIp = buildClientIp(request)
-  if (clientIp && !headers.has('cf-connecting-ip')) {
-    headers.set('cf-connecting-ip', clientIp)
-  }
-  if (clientIp && !headers.has('x-forwarded-for')) {
-    headers.set('x-forwarded-for', clientIp)
-  }
+  const headers = buildForwardedHeaders(request, {
+    'content-type': request.headers.get('content-type') || 'application/json',
+    'accept': request.headers.get('accept') || 'application/json',
+  })
 
   if (accessToken) {
     headers.set('authorization', `Bearer ${accessToken}`)

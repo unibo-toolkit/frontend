@@ -1,17 +1,20 @@
 import { ImageResponse } from 'next/og'
 import { getTranslations } from 'next-intl/server'
 import { hasLocale } from 'next-intl'
+import { headers } from 'next/headers'
 import { routing } from '@/i18n/routing'
+import { buildForwardedHeaders } from '@/lib/forwardHeaders'
 
 export const alt = 'UniPlanner — Shared calendar'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-async function fetchCalendar(slug: string) {
+async function fetchCalendar(slug: string, reqHeaders: Headers) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://uniplanner.it'
   try {
     const res = await fetch(`${apiUrl}/api/v1/calendars/public/${slug}`, {
       next: { revalidate: 300 },
+      headers: buildForwardedHeaders(reqHeaders),
     })
     if (!res.ok) return null
     return (await res.json()) as {
@@ -34,8 +37,9 @@ export default async function Image({ params }: { params: { locale: string; slug
   const tCreated = await getTranslations({ locale, namespace: 'create.created' })
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://uniplanner.it'
+  const reqHeaders = await headers()
   const [calendar, logoData] = await Promise.all([
-    fetchCalendar(params.slug),
+    fetchCalendar(params.slug, reqHeaders),
     fetch(`${siteUrl}/logo.png`).then((r) => r.arrayBuffer()).catch(() => null),
   ])
   const title = calendar?.name || t('fallbackName')

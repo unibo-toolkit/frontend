@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { setAuthCookies } from '@/lib/cookies'
 import { logError, logInfo } from '@/lib/logger'
+import { buildForwardedHeaders } from '@/lib/forwardHeaders'
 
 function detectProvider(
   params: URLSearchParams,
@@ -102,7 +103,7 @@ async function handleCallback(
 
     const response = await fetch(`${authServiceUrl}/api/v1/auth/exchange`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: buildForwardedHeaders(request, { 'content-type': 'application/json' }),
       body: JSON.stringify({
         provider,
         code,
