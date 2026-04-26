@@ -9,7 +9,7 @@ async function fetchPreview(subjectIds: string[], page: number, formatTitles: bo
   const params = new URLSearchParams()
   subjectIds.forEach((id) => params.append('subject_ids', id))
   params.append('page', String(page))
-  if (formatTitles) params.append('format_titles', 'true')
+  params.append('format_titles', formatTitles ? 'true' : 'false')
   const { data } = await api.get<PreviewResponse>(`/api/v1/preview?${params.toString()}`)
   return data
 }

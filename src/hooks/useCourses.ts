@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import api from '@/lib/api'
 import type { Course } from '@/types/calendar'
 import type { PaginatedResponse } from '@/types/api'
@@ -26,11 +26,12 @@ export function useSubjects(courseId: string, curriculumId: string, formatTitles
     queryFn: async () => {
       const { data } = await api.get<{ items: Subject[] }>(
         `/api/v1/courses/${courseId}/subjects`,
-        { params: { curriculum_id: curriculumId, format_titles: formatTitles || undefined } }
+        { params: { curriculum_id: curriculumId, format_titles: formatTitles ? 'true' : 'false' } }
       )
       return data.items
     },
     enabled: !!courseId && !!curriculumId,
     staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
   })
 }
