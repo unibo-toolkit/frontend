@@ -39,10 +39,17 @@ async function proxyRequest(request: NextRequest) {
 
   const accessToken = request.cookies.get('access_token')?.value
 
-  const headers = buildForwardedHeaders(request, {
-    'content-type': request.headers.get('content-type') || 'application/json',
-    'accept': request.headers.get('accept') || 'application/json',
-  })
+  const isDev = process.env.NODE_ENV === 'development'
+  const headers = isDev
+    ? new Headers({
+        'content-type': request.headers.get('content-type') || 'application/json',
+        'accept': request.headers.get('accept') || 'application/json',
+        'user-agent': request.headers.get('user-agent') || 'UniPlanner/1.0',
+      })
+    : buildForwardedHeaders(request, {
+        'content-type': request.headers.get('content-type') || 'application/json',
+        'accept': request.headers.get('accept') || 'application/json',
+      })
 
   if (accessToken) {
     headers.set('authorization', `Bearer ${accessToken}`)

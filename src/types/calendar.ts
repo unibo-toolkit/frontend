@@ -55,6 +55,9 @@ export interface Calendar {
   id: string
   slug: string
   name: string
+  description?: string | null
+  lang: string
+  format_event_titles: boolean
   ics_url: string
   ttl_expires_at: string
   owner_id: string | null
@@ -79,6 +82,7 @@ export interface PublicCalendar {
   name: string
   slug: string
   lang: string
+  format_event_titles: boolean
   claimed: boolean
   courses: CalendarCourse[]
   total_events: number
@@ -89,7 +93,19 @@ export interface PublicCalendar {
 export interface CreateCalendarRequest {
   name: string
   lang: string
+  format_event_titles?: boolean
   courses: {
+    curriculum_id: string
+    subject_ids: string[]
+  }[]
+}
+
+export interface UpdateCalendarRequest {
+  id: string
+  name?: string
+  lang?: string
+  format_event_titles?: boolean
+  courses?: {
     curriculum_id: string
     subject_ids: string[]
   }[]

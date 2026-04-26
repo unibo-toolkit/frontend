@@ -52,6 +52,9 @@ export default function CreatePage() {
   const [calendarName, setCalendarName] = useState('')
   const [createdCalendar, setCreatedCalendar] = useState<Calendar | null>(null)
   const [showCreatedModal, setShowCreatedModal] = useState(false)
+  const [courseType, setCourseType] = useState('')
+  const [calendarLang, setCalendarLang] = useState(locale)
+  const [formatTitles, setFormatTitles] = useState(true)
 
   const [displayPage, setDisplayPage] = useState(0)
   const [apiPage, setApiPage] = useState(0)
@@ -59,10 +62,10 @@ export default function CreatePage() {
 
   const courseId = selectedCourse?.id || ''
   const curriculumId = selectedCurriculum?.id || ''
-  const { data: subjects, isLoading: subjectsLoading } = useSubjects(courseId, curriculumId)
+  const { data: subjects, isLoading: subjectsLoading } = useSubjects(courseId, curriculumId, formatTitles)
 
   const subjectIds = useMemo(() => Array.from(selectedSubjects), [selectedSubjects])
-  const { data: previewData, isFetching: previewFetching } = usePreview(subjectIds, apiPage)
+  const { data: previewData, isFetching: previewFetching } = usePreview(subjectIds, apiPage, formatTitles)
 
   const [anchorMonday, setAnchorMonday] = useState<Date | null>(null)
 
@@ -164,7 +167,8 @@ export default function CreatePage() {
     const autoName = selectedCourse?.title ?? ''
     const result = await createCalendar.mutateAsync({
       name: calendarName.trim() || autoName,
-      lang: locale,
+      lang: calendarLang,
+      format_event_titles: formatTitles,
       courses: [
         {
           curriculum_id: selectedCurriculum.id,
@@ -200,6 +204,7 @@ export default function CreatePage() {
 
   const showSubjectSkeleton = !!curriculumId && subjectsLoading
   const noCurricula = !!selectedCourse && years.length === 0
+  const isSingleCurriculum = curricula.length === 1
 
   return (
     <div className={styles.page}>
@@ -220,6 +225,8 @@ export default function CreatePage() {
                 setSelectedSubjects(new Set())
               }}
               selectedCourse={selectedCourse}
+              courseType={courseType}
+              onCourseTypeChange={setCourseType}
             />
 
             {noCurricula && (
@@ -243,22 +250,29 @@ export default function CreatePage() {
                     <option key={year} value={year}>{year}</option>
                   ))}
                 </select>
-                {selectedYear && curricula.length > 1 && (
-                  <select
-                    className={styles.select}
-                    value={selectedCurriculum?.id ?? ''}
-                    onChange={(e) => {
-                      const c = curricula.find((c) => c.id === e.target.value) ?? null
-                      setSelectedCurriculum(c)
-                      setSelectedSubjects(new Set())
-                    }}
-                  >
-                    <option value="">{t('curriculum')}</option>
-                    {curricula.map((c) => (
-                      <option key={c.id} value={c.id}>{cleanCurriculumLabel(c.label)}</option>
-                    ))}
-                  </select>
-                )}
+                <select
+                  className={`${styles.select} ${!selectedYear || isSingleCurriculum ? styles.selectDisabled : ''}`}
+                  value={selectedCurriculum?.id ?? ''}
+                  onChange={(e) => {
+                    const c = curricula.find((c) => c.id === e.target.value) ?? null
+                    setSelectedCurriculum(c)
+                    setSelectedSubjects(new Set())
+                  }}
+                  disabled={!selectedYear || isSingleCurriculum}
+                >
+                  {!selectedYear ? (
+                    <option value="">{t('curriculumPlaceholder')}</option>
+                  ) : isSingleCurriculum ? (
+                    <option value={curricula[0].id}>{cleanCurriculumLabel(curricula[0].label)}</option>
+                  ) : (
+                    <>
+                      <option value="">{t('curriculum')}</option>
+                      {curricula.map((c) => (
+                        <option key={c.id} value={c.id}>{cleanCurriculumLabel(c.label)}</option>
+                      ))}
+                    </>
+                  )}
+                </select>
               </div>
             )}
 
@@ -283,6 +297,7 @@ export default function CreatePage() {
                 onSelectAll={handleSelectAll}
                 onDeselectAll={handleDeselectAll}
                 disabled={toggling}
+                showCount
               />
             )}
           </StepWizard>
@@ -305,11 +320,47 @@ export default function CreatePage() {
             />
           </div>
 
-          {selectedSubjects.size > 0 && (
+          {subjects && subjects.length > 0 && (
             <div className={styles.createSection}>
+              <div className={styles.settingsCard}>
+                <span className={styles.settingsLabel}>{t('calendarSettings')}</span>
+
+                <div className={styles.settingRow}>
+                  <div className={styles.settingTextWrap}>
+                    <span className={styles.settingText}>{t('calendarLang')}</span>
+                    <span className={styles.settingHint}>{t('calendarLangHint')}</span>
+                  </div>
+                  <select
+                    className={styles.settingPill}
+                    value={calendarLang}
+                    onChange={(e) => setCalendarLang(e.target.value)}
+                  >
+                    <option value="en">English</option>
+                    <option value="it">Italiano</option>
+                  </select>
+                </div>
+
+                <div className={styles.settingDivider} />
+
+                <div className={styles.settingRow}>
+                  <div className={styles.settingTextWrap}>
+                    <span className={styles.settingText}>{t('formatTitles')}</span>
+                    <span className={styles.settingHint}>{t('formatTitlesHint')}</span>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={formatTitles}
+                    className={`${styles.toggle} ${formatTitles ? styles.toggleOn : ''}`}
+                    onClick={() => setFormatTitles((v) => !v)}
+                  >
+                    <span className={styles.toggleThumb} />
+                  </button>
+                </div>
+              </div>
+
               <div className={styles.nameRow}>
                 <div className={styles.nameInputWrap}>
-                  <label className={styles.nameLabel}>{t('calendarName')}</label>
                   <input
                     type="text"
                     className={styles.nameInput}
@@ -322,7 +373,7 @@ export default function CreatePage() {
                 <Button
                   variant="primary"
                   onClick={handleCreate}
-                  disabled={createCalendar.isPending || previewFetching}
+                  disabled={createCalendar.isPending || previewFetching || selectedSubjects.size === 0}
                 >
                   {t('createButton')}
                 </Button>

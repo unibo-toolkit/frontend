@@ -24,6 +24,7 @@ interface SubjectListProps {
   isLoading?: boolean
   disabled?: boolean
   readOnly?: boolean
+  showCount?: boolean
 }
 
 export default function SubjectList({
@@ -36,6 +37,7 @@ export default function SubjectList({
   isLoading,
   disabled,
   readOnly,
+  showCount,
 }: SubjectListProps) {
   const t = useTranslations('create')
   const listRef = useRef<HTMLDivElement>(null)
@@ -82,7 +84,12 @@ export default function SubjectList({
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <span className={styles.label}>{t('subjects')}</span>
+        <div className={styles.headerLeft}>
+          <span className={styles.label}>{t('subjects')}</span>
+          {showCount && (
+            <span className={styles.count}>{selected.size}/{subjects.length}</span>
+          )}
+        </div>
         {!readOnly && (
           <div className={styles.actions}>
             <button className={styles.action} onClick={onDeselectAll} disabled={disabled}>{t('deselectAll')}</button>

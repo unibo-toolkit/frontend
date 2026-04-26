@@ -53,7 +53,7 @@ export default function PublicCalendarPage() {
   const apiPageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const claimAttemptedRef = useRef(false)
 
-  const { data: previewData } = usePreview(subjectIds, apiPage)
+  const { data: previewData } = usePreview(subjectIds, apiPage, calendar?.format_event_titles ?? false)
 
   const [anchorMonday, setAnchorMonday] = useState<Date | null>(null)
 
