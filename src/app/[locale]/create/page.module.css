@@ -76,6 +76,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: opacity 0.15s;
 }
 
 .selectYear {
@@ -88,17 +89,131 @@
   box-shadow: 0 0 0 1px var(--fg-250);
 }
 
+.selectDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .noCurricula {
   font-size: var(--text-base);
   color: var(--fg-200);
 }
 
+/* Subjects count — used inline */
+.subjectsCount {
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+}
+
+/* Create section with settings */
 .createSection {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-16);
+  gap: var(--spacing-18);
 }
 
+/* Settings card */
+.settingsCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20);
+}
+
+.settingsLabel {
+  font-size: var(--text-lg);
+  color: var(--fg-100);
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+}
+
+.settingDivider {
+  height: 1px;
+  background-color: var(--border);
+}
+
+.settingTextWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+.settingText {
+  font-size: var(--text-base);
+  color: var(--fg-150);
+}
+
+.settingHint {
+  font-size: var(--text-sm);
+  color: var(--fg-250);
+  line-height: 1.3;
+}
+
+/* Language pill — matches .select style */
+.settingPill {
+  padding: var(--spacing-10) var(--spacing-20);
+  background-color: var(--bg-150);
+  border: none;
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+  cursor: pointer;
+  font-family: var(--font-primary), sans-serif;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23888' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 32px;
+}
+
+.settingPill:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--fg-250);
+}
+
+/* Toggle switch — minimal, matches site palette */
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  border: none;
+  background-color: var(--bg-200);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+}
+
+.toggleOn {
+  background-color: #32c956;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.2s;
+  pointer-events: none;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(18px);
+}
+
+/* Name row */
 .nameRow {
   display: flex;
   gap: var(--spacing-16);
@@ -107,15 +222,7 @@
 
 .nameInputWrap {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
   min-width: 0;
-}
-
-.nameLabel {
-  font-size: var(--text-base);
-  color: var(--fg-200);
 }
 
 .nameInput {

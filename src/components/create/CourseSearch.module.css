@@ -3,6 +3,41 @@
   width: 100%;
 }
 
+.filters {
+  display: flex;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--fg-200);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  font-family: var(--font-primary), sans-serif;
+  transition: all 0.15s;
+}
+
+.filterChip:hover {
+  border-color: var(--fg-250);
+  color: var(--fg-100);
+}
+
+.filterActive {
+  background-color: var(--fg-100);
+  color: var(--bg-main);
+  border-color: var(--fg-100);
+}
+
+.filterActive:hover {
+  opacity: 0.9;
+  color: var(--bg-main);
+}
+
 .input {
   width: 100%;
   background-color: var(--bg-150);

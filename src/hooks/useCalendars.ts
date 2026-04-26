@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/api'
-import type { Calendar, CalendarListItem, CreateCalendarRequest, PublicCalendar } from '@/types/calendar'
+import type { Calendar, CalendarListItem, CreateCalendarRequest, UpdateCalendarRequest, PublicCalendar } from '@/types/calendar'
 
 export function useCalendars() {
   return useQuery({
@@ -62,7 +62,7 @@ export function useCreateCalendar() {
 export function useUpdateCalendar() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, ...data }: CreateCalendarRequest & { id: string }) => {
+    mutationFn: async ({ id, ...data }: UpdateCalendarRequest) => {
       const { data: result } = await api.patch<Calendar>(`/api/v1/calendars/${id}`, data)
       return result
     },

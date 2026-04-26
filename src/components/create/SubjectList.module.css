@@ -13,8 +13,19 @@
   color: var(--fg-200);
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
 .label {
   color: var(--fg-200);
+}
+
+.count {
+  font-size: var(--text-sm);
+  color: var(--fg-250);
 }
 
 .actions {

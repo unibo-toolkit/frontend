@@ -10,6 +10,8 @@ import styles from './CourseSearch.module.css'
 interface CourseSearchProps {
   onSelect: (course: Course) => void
   selectedCourse: Course | null
+  courseType: string
+  onCourseTypeChange: (type: string) => void
 }
 
 const LANG_FLAGS: Record<string, string> = {
@@ -49,14 +51,21 @@ function normalizeCampus(campus: string | undefined): string | null {
   return CAMPUS_NAMES[campus.toUpperCase()] ?? campus
 }
 
-export default function CourseSearch({ onSelect, selectedCourse }: CourseSearchProps) {
+const FILTER_OPTIONS = [
+  { value: '', key: 'filterAll' },
+  { value: 'Bachelor', key: 'filterBachelor' },
+  { value: 'Master', key: 'filterMaster' },
+  { value: 'SingleCycleMaster', key: 'filterSingleCycle' },
+] as const
+
+export default function CourseSearch({ onSelect, selectedCourse, courseType, onCourseTypeChange }: CourseSearchProps) {
   const t = useTranslations('create')
   const locale = useLocale()
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
-  const { data, isLoading } = useSearchCourses(query, locale, isOpen)
+  const { data, isLoading } = useSearchCourses(query, locale, isOpen, courseType || undefined)
 
   useEffect(() => {
     setQuery('')
@@ -77,6 +86,18 @@ export default function CourseSearch({ onSelect, selectedCourse }: CourseSearchP
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
+      <div className={styles.filters}>
+        {FILTER_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            className={`${styles.filterChip} ${courseType === opt.value ? styles.filterActive : ''}`}
+            onClick={() => onCourseTypeChange(opt.value)}
+            type="button"
+          >
+            {t(opt.key)}
+          </button>
+        ))}
+      </div>
       <input
         className={styles.input}
         type="text"

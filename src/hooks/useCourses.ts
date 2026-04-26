@@ -6,12 +6,12 @@ import type { Course } from '@/types/calendar'
 import type { PaginatedResponse } from '@/types/api'
 import type { Subject } from '@/types/calendar'
 
-export function useSearchCourses(query: string, lang: string, enabled = false) {
+export function useSearchCourses(query: string, lang: string, enabled = false, courseType?: string) {
   return useQuery({
-    queryKey: ['courses', query, lang],
+    queryKey: ['courses', query, lang, courseType],
     queryFn: async () => {
       const { data } = await api.get<PaginatedResponse<Course>>('/api/v1/courses', {
-        params: { q: query || undefined, lang, limit: 50 },
+        params: { q: query || undefined, lang, limit: 50, type: courseType || undefined },
       })
       return data
     },
@@ -20,13 +20,13 @@ export function useSearchCourses(query: string, lang: string, enabled = false) {
   })
 }
 
-export function useSubjects(courseId: string, curriculumId: string) {
+export function useSubjects(courseId: string, curriculumId: string, formatTitles = false) {
   return useQuery({
-    queryKey: ['subjects', courseId, curriculumId],
+    queryKey: ['subjects', courseId, curriculumId, formatTitles],
     queryFn: async () => {
       const { data } = await api.get<{ items: Subject[] }>(
         `/api/v1/courses/${courseId}/subjects`,
-        { params: { curriculum_id: curriculumId } }
+        { params: { curriculum_id: curriculumId, format_titles: formatTitles || undefined } }
       )
       return data.items
     },

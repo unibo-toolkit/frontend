@@ -53,6 +53,8 @@ export default function EditCalendarPage() {
   const deleteCalendar = useDeleteCalendar()
 
   const [calendarName, setCalendarName] = useState('')
+  const [calendarLang, setCalendarLang] = useState('')
+  const [formatTitles, setFormatTitles] = useState(true)
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set())
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -64,7 +66,7 @@ export default function EditCalendarPage() {
   const courseData = calendar?.courses?.[0]
   const courseId = courseData?.curriculum?.course?.id || ''
   const curriculumId = courseData?.curriculum?.id || ''
-  const { data: subjects } = useSubjects(courseId, curriculumId)
+  const { data: subjects } = useSubjects(courseId, curriculumId, formatTitles)
 
   const courseName = courseData?.curriculum?.course
     ? `${courseData.curriculum.course.title_en || courseData.curriculum.course.title_it}`
@@ -74,8 +76,10 @@ export default function EditCalendarPage() {
   useEffect(() => {
     if (calendar) {
       setCalendarName(calendar.name)
+      setCalendarLang(calendar.lang || locale)
+      setFormatTitles(calendar.format_event_titles)
     }
-  }, [calendar])
+  }, [calendar, locale])
 
   useEffect(() => {
     if (courseData) {
@@ -84,7 +88,7 @@ export default function EditCalendarPage() {
   }, [courseData])
 
   const subjectIds = useMemo(() => Array.from(selectedSubjects), [selectedSubjects])
-  const { data: previewData } = usePreview(subjectIds, apiPage)
+  const { data: previewData } = usePreview(subjectIds, apiPage, formatTitles)
 
   useEffect(() => {
     if (previewData?.target?.start_datetime && apiPage === 0 && displayPage === 0) {
@@ -191,7 +195,8 @@ export default function EditCalendarPage() {
     await updateCalendar.mutateAsync({
       id: calendar.id,
       name: calendarName,
-      lang: locale,
+      lang: calendarLang,
+      format_event_titles: formatTitles,
       courses: [{ curriculum_id: curriculumId, subject_ids: Array.from(selectedSubjects) }],
     })
     goBack()
@@ -350,6 +355,43 @@ export default function EditCalendarPage() {
 
         <div className={styles.content}>
           <div className={styles.formCol}>
+            <div className={styles.card}>
+              <span className={styles.settingsTitle}>{t('calendarSettings')}</span>
+
+              <div className={styles.settingRow}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>{t('calendarLang')}</span>
+                  <span className={styles.settingHint}>{t('calendarLangHint')}</span>
+                </div>
+                <select
+                  className={styles.settingSelect}
+                  value={calendarLang}
+                  onChange={(e) => setCalendarLang(e.target.value)}
+                >
+                  <option value="en">English</option>
+                  <option value="it">Italiano</option>
+                </select>
+              </div>
+
+              <div className={styles.divider} />
+
+              <div className={styles.settingRow}>
+                <div className={styles.settingInfo}>
+                  <span className={styles.settingLabel}>{t('formatTitles')}</span>
+                  <span className={styles.settingHint}>{t('formatTitlesHint')}</span>
+                </div>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={formatTitles}
+                  className={`${styles.toggle} ${formatTitles ? styles.toggleOn : ''}`}
+                  onClick={() => setFormatTitles((v) => !v)}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
+              </div>
+            </div>
+
             <div className={styles.card}>
               <label className={styles.fieldLabel}>{dt('calendarNameLabel')}</label>
               <input
