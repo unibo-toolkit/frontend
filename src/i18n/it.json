@@ -156,6 +156,7 @@
     "subjectsTitle": "Materie",
     "subjectsSelected": "{selected} di {total} selezionate",
     "deleteCalendarBtn": "Elimina calendario",
+    "deleteCalendarConfirm": "Sei sicuro di voler eliminare questo calendario? L'azione non può essere annullata e chi è iscritto smetterà di ricevere gli aggiornamenti",
     "saveBtn": "Salva",
     "previewLabel": "Anteprima del calendario",
     "icsLinkLabel": "Il tuo link .ics",
@@ -196,7 +197,7 @@
     "logoutAllDesc": "Esci da tutti i dispositivi su cui sei attualmente connesso",
     "deleteAccount": "Elimina account",
     "deleteAccountDesc": "Elimina permanentemente il tuo account. I tuoi calendari diventeranno anonimi.",
-    "deleteConfirm": "Sei sicuro? Questa azione non può essere annullata. I tuoi calendari diventeranno anonimi.",
+    "deleteConfirm": "L'azione non può essere annullata. I calendari collegati al tuo account non verranno eliminati - diventeranno semplicemente pubblici e scollegati dall'account",
     "save": "Salva modifiche"
   },
   "errors": {

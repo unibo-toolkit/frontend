@@ -11,6 +11,7 @@ import { useThemeStore } from '@/stores/themeStore'
 import SubjectList from '@/components/create/SubjectList'
 import CalendarPreview from '@/components/calendar/CalendarPreview'
 import Button from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
 import { Plus } from '@/components/ui/icons'
 import Skeleton from '@/components/ui/Skeleton'
 import { useCalendar, useUpdateCalendar, useDeleteCalendar } from '@/hooks/useCalendars'
@@ -44,6 +45,7 @@ export default function EditCalendarPage() {
   const dt = useTranslations('dashboard')
   const et = useTranslations('errors')
   const a11y = useTranslations('a11y')
+  const ct = useTranslations('common')
   const { user } = useAuthStore()
   const locale = useLocale()
   const { theme } = useThemeStore()
@@ -58,6 +60,7 @@ export default function EditCalendarPage() {
   const [formatTitles, setFormatTitles] = useState(true)
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set())
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const [displayPage, setDisplayPage] = useState(0)
   const [apiPage, setApiPage] = useState(0)
@@ -427,7 +430,7 @@ export default function EditCalendarPage() {
             <div className={styles.formActions}>
               <Button
                 variant="danger"
-                onClick={handleDelete}
+                onClick={() => setShowDeleteConfirm(true)}
                 disabled={deleteCalendar.isPending}
                 fullWidth
               >
@@ -442,6 +445,17 @@ export default function EditCalendarPage() {
                 {updateCalendar.isPending ? '...' : dt('saveBtn')}
               </Button>
             </div>
+
+            <Modal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)}>
+              <div className={styles.modalContent}>
+                <h2 className={styles.modalTitle}>{dt('deleteCalendarBtn')}</h2>
+                <p className={styles.modalDesc}>{dt('deleteCalendarConfirm')}</p>
+                <div className={styles.modalActions}>
+                  <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>{ct('cancel')}</Button>
+                  <Button variant="danger" onClick={handleDelete} disabled={deleteCalendar.isPending}>{ct('delete')}</Button>
+                </div>
+              </div>
+            </Modal>
           </div>
 
           <div className={styles.previewCol}>

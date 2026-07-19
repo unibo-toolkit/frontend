@@ -419,3 +419,27 @@
   font-size: var(--text-lg);
   color: var(--fg-200);
 }
+
+/* Delete confirmation modal */
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.modalTitle {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.modalDesc {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--spacing-16);
+  justify-content: flex-end;
+}
