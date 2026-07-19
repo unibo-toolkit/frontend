@@ -1,0 +1,32 @@
+# UniPlanner local gateway — path routing only (mirrors prod Traefik).
+# Identity headers (X-User-*) are injected by the Next.js dev proxy, not here,
+# because auth here is optional (anonymous + public routes must pass through).
+
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	# Auth service — OAuth flow + user profile/sessions
+	@auth path /api/v1/auth* /api/v1/users*
+	handle @auth {
+		reverse_proxy auth-service:8081
+	}
+
+	# Scraper service — courses, subjects, preview, timetable (public)
+	@scraper path /api/v1/courses* /api/v1/timetable* /api/v1/preview* /api/v1/scraper*
+	handle @scraper {
+		reverse_proxy scraper-service:8083
+	}
+
+	# Calendar manager — calendars API + public .ics feed
+	@calendar path /api/v1/calendars* /cal/*
+	handle @calendar {
+		reverse_proxy calendar-manager:8082
+	}
+
+	handle {
+		respond "UniPlanner local gateway — unknown route" 404
+	}
+}

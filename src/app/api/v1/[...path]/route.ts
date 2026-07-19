@@ -11,6 +11,19 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+function injectDevIdentity(headers: Headers, token: string) {
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return
+    const claims = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'))
+    if (claims.uid) headers.set('x-user-id', String(claims.uid))
+    if (claims.email) headers.set('x-email', String(claims.email))
+    if (Array.isArray(claims.roles)) {
+      headers.set('x-roles', Buffer.from(JSON.stringify(claims.roles)).toString('base64'))
+    }
+  } catch {}
+}
+
 async function fetchWithRetry(
   targetUrl: string,
   init: RequestInit,
@@ -53,6 +66,9 @@ async function proxyRequest(request: NextRequest) {
 
   if (accessToken) {
     headers.set('authorization', `Bearer ${accessToken}`)
+    if (isDev) {
+      injectDevIdentity(headers, accessToken)
+    }
   }
 
   const method = request.method
