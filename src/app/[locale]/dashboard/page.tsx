@@ -11,7 +11,7 @@ import { useDashboardStats } from '@/hooks/useDashboardStats'
 import CalendarCard from '@/components/dashboard/CalendarCard'
 import ShareModal from '@/components/dashboard/ShareModal'
 import Button from '@/components/ui/Button'
-import { Plus } from '@/components/ui/icons'
+import { Plus, ArrowRight } from '@/components/ui/icons'
 import Skeleton from '@/components/ui/Skeleton'
 import type { CalendarListItem } from '@/types/calendar'
 import styles from './page.module.css'
@@ -158,7 +158,13 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p className={styles.empty}>{t('noCalendars')}</p>
+            <div className={styles.emptyCard}>
+              <h3 className={styles.emptyTitle}>{t('emptyTitle')}</h3>
+              <p className={styles.emptyDesc}>{t('emptyDesc')}</p>
+              <Link href="/create">
+                <Button variant="primary" icon={<ArrowRight />}>{t('createFirst')}</Button>
+              </Link>
+            </div>
           )}
         </div>
       </main>

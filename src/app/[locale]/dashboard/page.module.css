@@ -231,6 +231,29 @@
   color: var(--fg-200);
 }
 
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-24);
+  padding: var(--spacing-48);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: var(--text-2xl);
+  color: var(--fg-100);
+}
+
+.emptyDesc {
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+  line-height: 1.4;
+}
+
 @media (max-width: 1140px) {
   .stats {
     grid-template-columns: 1fr 1fr;
@@ -312,5 +335,9 @@
 
   .stats {
     grid-template-columns: 1fr;
+  }
+
+  .emptyCard {
+    padding: var(--spacing-32) var(--spacing-24);
   }
 }
