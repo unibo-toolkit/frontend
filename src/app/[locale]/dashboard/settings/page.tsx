@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import { useAuthStore } from '@/stores/authStore'
-import { performLogout } from '@/hooks/useAuth'
+import { performLogout, performLogoutAll } from '@/hooks/useAuth'
 import api from '@/lib/api'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
@@ -44,11 +44,6 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async () => {
     await api.delete('/api/v1/users/me/')
-    await performLogout()
-  }
-
-  const handleLogoutAll = async () => {
-    await api.post('/api/v1/auth/logout-all', { refresh_token: '' })
     await performLogout()
   }
 
@@ -200,7 +195,7 @@ export default function SettingsPage() {
                 <h3 className={styles.dangerTitle}>{t('logoutAll')}</h3>
                 <p className={styles.dangerText}>{t('logoutAllDesc')}</p>
               </div>
-              <Button variant="ghost" onClick={handleLogoutAll}>{t('logoutAll')}</Button>
+              <Button variant="ghost" onClick={performLogoutAll}>{t('logoutAll')}</Button>
             </div>
 
             <div className={styles.divider} />
