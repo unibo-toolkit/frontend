@@ -134,7 +134,7 @@
   },
   "dashboard": {
     "welcome": "Benvenuto, {name}",
-    "createNew": "Crea nuovo calendario",
+    "createNew": "Crea calendario",
     "noCalendars": "Nessun calendario ancora",
     "view": "Visualizza",
     "edit": "Modifica",

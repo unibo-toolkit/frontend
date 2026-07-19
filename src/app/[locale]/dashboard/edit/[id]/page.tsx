@@ -11,6 +11,7 @@ import { useThemeStore } from '@/stores/themeStore'
 import SubjectList from '@/components/create/SubjectList'
 import CalendarPreview from '@/components/calendar/CalendarPreview'
 import Button from '@/components/ui/Button'
+import { Plus } from '@/components/ui/icons'
 import Skeleton from '@/components/ui/Skeleton'
 import { useCalendar, useUpdateCalendar, useDeleteCalendar } from '@/hooks/useCalendars'
 import { useSubjects } from '@/hooks/useCourses'
@@ -316,7 +317,7 @@ export default function EditCalendarPage() {
         </div>
         <div className={dashboardStyles.sidebarBottom}>
           <Link href="/create">
-            <Button variant="primary" fullWidth>+ {dt('createNew')}</Button>
+            <Button variant="primary" fullWidth icon={<Plus />} iconPosition="left">{dt('createNew')}</Button>
           </Link>
         </div>
       </div>

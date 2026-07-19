@@ -11,6 +11,7 @@ import { useDashboardStats } from '@/hooks/useDashboardStats'
 import CalendarCard from '@/components/dashboard/CalendarCard'
 import ShareModal from '@/components/dashboard/ShareModal'
 import Button from '@/components/ui/Button'
+import { Plus } from '@/components/ui/icons'
 import Skeleton from '@/components/ui/Skeleton'
 import type { CalendarListItem } from '@/types/calendar'
 import styles from './page.module.css'
@@ -94,7 +95,7 @@ export default function DashboardPage() {
         </div>
         <div className={styles.sidebarBottom}>
           <Link href="/create">
-            <Button variant="primary" fullWidth>+ {t('createNew')}</Button>
+            <Button variant="primary" fullWidth icon={<Plus />} iconPosition="left">{t('createNew')}</Button>
           </Link>
         </div>
       </div>

@@ -90,7 +90,7 @@
 
 @media (max-width: 767px) {
   .btn {
-    padding: var(--spacing-12) var(--spacing-18);
+    padding: var(--spacing-14) var(--spacing-18);
     font-size: var(--text-base);
   }
 

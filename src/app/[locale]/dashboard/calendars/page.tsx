@@ -9,6 +9,7 @@ import { useCalendars } from '@/hooks/useCalendars'
 import CalendarCard from '@/components/dashboard/CalendarCard'
 import ShareModal from '@/components/dashboard/ShareModal'
 import Button from '@/components/ui/Button'
+import { Plus, ArrowRight } from '@/components/ui/icons'
 import Input from '@/components/ui/Input'
 import Skeleton from '@/components/ui/Skeleton'
 import type { CalendarListItem } from '@/types/calendar'
@@ -77,7 +78,7 @@ export default function CalendarsPage() {
         </div>
         <div className={dashStyles.sidebarBottom}>
           <Link href="/create">
-            <Button variant="primary" fullWidth>+ {t('createNew')}</Button>
+            <Button variant="primary" fullWidth icon={<Plus />} iconPosition="left">{t('createNew')}</Button>
           </Link>
         </div>
       </div>
@@ -96,9 +97,11 @@ export default function CalendarsPage() {
           </div>
         </div>
 
-        <Link href="/create" className={styles.mobileCreateBtn}>
-          <Button variant="primary" fullWidth>+ {t('createNew')}</Button>
-        </Link>
+        {calendars && calendars.length > 0 && (
+          <Link href="/create" className={styles.mobileCreateBtn}>
+            <Button variant="primary" fullWidth icon={<Plus />} iconPosition="left">{t('createNew')}</Button>
+          </Link>
+        )}
 
         <div className={styles.search}>
           <Input
@@ -125,7 +128,7 @@ export default function CalendarsPage() {
             <h3 className={styles.emptyTitle}>{t('emptyTitle')}</h3>
             <p className={styles.emptyDesc}>{t('emptyDesc')}</p>
             <Link href="/create">
-              <Button variant="primary">{t('createFirst')} →</Button>
+              <Button variant="primary" icon={<ArrowRight />}>{t('createFirst')}</Button>
             </Link>
           </div>
         ) : (
