@@ -25,15 +25,3 @@
   color: var(--fg-200);
   max-width: 400px;
 }
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-16) var(--spacing-22);
-  background-color: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  border-radius: var(--radius-full);
-  font-size: var(--text-lg);
-  text-decoration: none;
-}

@@ -55,6 +55,7 @@ export function useCreateCalendar() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['calendars'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
     },
   })
 }
@@ -69,6 +70,7 @@ export function useUpdateCalendar() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['calendars'] })
       queryClient.invalidateQueries({ queryKey: ['calendar', variables.id] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
     },
   })
 }
@@ -81,6 +83,7 @@ export function useDeleteCalendar() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['calendars'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
     },
   })
 }
@@ -94,6 +97,7 @@ export function useClaimCalendar() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['calendars'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
     },
   })
 }

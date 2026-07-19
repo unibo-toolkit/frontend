@@ -45,26 +45,66 @@ export default function ShareModal({ isOpen, onClose, calendar }: ShareModalProp
         <div className={styles.section}>
           <span className={styles.label}>{t('addTo')}</span>
           <div className={styles.buttons}>
-            <a href={webcalUrl} className={styles.calButton}>
-              <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-              <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+            <Button
+              variant="outline"
+              fullWidth
+              iconPosition="left"
+              href={webcalUrl}
+              icon={
+                <>
+                  <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                  <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                </>
+              }
+            >
               {t('appleCalendar')}
-            </a>
-            <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={styles.calButton}>
-              <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-              <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+            </Button>
+            <Button
+              variant="outline"
+              fullWidth
+              iconPosition="left"
+              href={googleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              icon={
+                <>
+                  <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                  <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                </>
+              }
+            >
               {t('googleCalendar')}
-            </a>
-            <button type="button" className={styles.calButton} onClick={handleCopy}>
-              <img src="/icons/link-copy-dark.svg" width={17} height={17} alt="" className={styles.iconDark} />
-              <img src="/icons/link-copy-light.svg" width={17} height={17} alt="" className={styles.iconLight} />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth
+              iconPosition="left"
+              onClick={handleCopy}
+              icon={
+                <>
+                  <img src="/icons/link-copy-dark.svg" width={17} height={17} alt="" className={styles.iconDark} />
+                  <img src="/icons/link-copy-light.svg" width={17} height={17} alt="" className={styles.iconLight} />
+                </>
+              }
+            >
               {copied ? commonT('copied') : t('copyLink')}
-            </button>
-            <a href={icsUrl} download className={styles.calButton}>
-              <img src="/icons/cloud-download-dark.svg" width={19} height={19} alt="" className={styles.iconDark} />
-              <img src="/icons/cloud-download-light.svg" width={19} height={19} alt="" className={styles.iconLight} />
+            </Button>
+            <Button
+              variant="outline"
+              fullWidth
+              iconPosition="left"
+              href={icsUrl}
+              download
+              icon={
+                <>
+                  <img src="/icons/cloud-download-dark.svg" width={19} height={19} alt="" className={styles.iconDark} />
+                  <img src="/icons/cloud-download-light.svg" width={19} height={19} alt="" className={styles.iconLight} />
+                </>
+              }
+            >
               {t('downloadIcs')}
-            </a>
+            </Button>
           </div>
         </div>
 

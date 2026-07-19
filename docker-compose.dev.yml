@@ -1,0 +1,109 @@
+name: uniplanner-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: unibo_toolkit
+      POSTGRES_USER: unibo_user
+      POSTGRES_PASSWORD: unibo_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unibo_user -d unibo_toolkit"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Migrations: prod-like pre-hook
+  # Fresh-clone the databases repo, then golang-migrate `up`.
+  # Backends do not start until `migrate` completes successfully.
+  db-clone:
+    image: alpine/git:latest
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - "rm -rf /repo/databases && git clone --depth 1 https://github.com/unibo-toolkit/databases.git /repo/databases"
+    volumes:
+      - migrations_repo:/repo
+
+  migrate:
+    image: migrate/migrate:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      db-clone:
+        condition: service_completed_successfully
+    volumes:
+      - migrations_repo:/repo
+    command:
+      - "-path=/repo/databases/migrations"
+      - "-database=postgresql://unibo_user:unibo_pass@postgres:5432/unibo_toolkit?sslmode=disable"
+      - "up"
+
+  # Backend services (prebuilt :dev images)
+  auth-service:
+    image: ghcr.io/unibo-toolkit/auth-service:dev
+    pull_policy: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    env_file:
+      - dev/auth.env
+
+  scraper-service:
+    image: ghcr.io/unibo-toolkit/scraper-service:dev
+    pull_policy: always
+    ports:
+      - "8083:8083"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    env_file:
+      - dev/scraper.env
+
+  calendar-manager:
+    image: ghcr.io/unibo-toolkit/calendar-manager-service:dev
+    pull_policy: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    env_file:
+      - dev/calendar.env
+
+  # Gateway: path routing
+  gateway:
+    image: caddy:2-alpine
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - scraper-service
+      - calendar-manager
+    volumes:
+      - ./dev/Caddyfile:/etc/caddy/Caddyfile:ro
+
+volumes:
+  postgres_data:
+  redis_data:
+  migrations_repo:

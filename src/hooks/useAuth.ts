@@ -16,6 +16,15 @@ export async function performLogout() {
   window.location.href = '/'
 }
 
+export async function performLogoutAll() {
+  markLogoutInProgress()
+  stopBackgroundRefresh()
+  try { await fetch('/api/auth/logout-all', { method: 'POST' }) } catch {}
+  useAuthStore.getState().logout()
+  broadcastLogout()
+  window.location.href = '/'
+}
+
 export function useAuth(enabled = true) {
   const { isLoggedIn, user, setUser, logout } = useAuthStore()
   const [authReady, setAuthReady] = useState(!enabled)

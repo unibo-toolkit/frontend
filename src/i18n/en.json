@@ -134,7 +134,7 @@
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
-    "createNew": "Create new calendar",
+    "createNew": "Create calendar",
     "noCalendars": "No calendars yet",
     "view": "View",
     "edit": "Edit",
@@ -156,6 +156,7 @@
     "subjectsTitle": "Subjects",
     "subjectsSelected": "{selected} of {total} selected",
     "deleteCalendarBtn": "Delete calendar",
+    "deleteCalendarConfirm": "Are you sure you want to delete this calendar? This can't be undone, and anyone subscribed to it will stop receiving updates",
     "saveBtn": "Save",
     "previewLabel": "Preview of calendar",
     "icsLinkLabel": "Your .ics link",
@@ -196,7 +197,7 @@
     "logoutAllDesc": "Sign out from all devices where you're currently logged in",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "Permanently delete your account. Your calendars will become anonymous.",
-    "deleteConfirm": "Are you sure? This action cannot be undone. Your calendars will become anonymous.",
+    "deleteConfirm": "This can't be undone. Calendars linked to your account won't be deleted - they'll just become public and unlinked from your account",
     "save": "Save changes"
   },
   "errors": {

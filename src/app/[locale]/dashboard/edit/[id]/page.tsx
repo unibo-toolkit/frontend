@@ -11,6 +11,8 @@ import { useThemeStore } from '@/stores/themeStore'
 import SubjectList from '@/components/create/SubjectList'
 import CalendarPreview from '@/components/calendar/CalendarPreview'
 import Button from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
+import { Plus } from '@/components/ui/icons'
 import Skeleton from '@/components/ui/Skeleton'
 import { useCalendar, useUpdateCalendar, useDeleteCalendar } from '@/hooks/useCalendars'
 import { useSubjects } from '@/hooks/useCourses'
@@ -43,6 +45,7 @@ export default function EditCalendarPage() {
   const dt = useTranslations('dashboard')
   const et = useTranslations('errors')
   const a11y = useTranslations('a11y')
+  const ct = useTranslations('common')
   const { user } = useAuthStore()
   const locale = useLocale()
   const { theme } = useThemeStore()
@@ -57,6 +60,7 @@ export default function EditCalendarPage() {
   const [formatTitles, setFormatTitles] = useState(true)
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set())
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const [displayPage, setDisplayPage] = useState(0)
   const [apiPage, setApiPage] = useState(0)
@@ -240,9 +244,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('accessDenied')}</h1>
         <p>{et('accessDeniedDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -252,9 +256,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('calendarNotFound')}</h1>
         <p>{et('calendarNotFoundDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -264,9 +268,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('serverError')}</h1>
         <p>{et('serverErrorDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -316,7 +320,7 @@ export default function EditCalendarPage() {
         </div>
         <div className={dashboardStyles.sidebarBottom}>
           <Link href="/create">
-            <Button variant="primary" fullWidth>+ {dt('createNew')}</Button>
+            <Button variant="primary" fullWidth icon={<Plus />} iconPosition="left">{dt('createNew')}</Button>
           </Link>
         </div>
       </div>
@@ -424,13 +428,14 @@ export default function EditCalendarPage() {
             </div>
 
             <div className={styles.formActions}>
-              <button
-                className={styles.deleteBtn}
-                onClick={handleDelete}
+              <Button
+                variant="danger"
+                onClick={() => setShowDeleteConfirm(true)}
                 disabled={deleteCalendar.isPending}
+                fullWidth
               >
                 {deleteCalendar.isPending ? '...' : dt('deleteCalendarBtn')}
-              </button>
+              </Button>
               <Button
                 variant="primary"
                 onClick={handleSave}
@@ -440,6 +445,17 @@ export default function EditCalendarPage() {
                 {updateCalendar.isPending ? '...' : dt('saveBtn')}
               </Button>
             </div>
+
+            <Modal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)}>
+              <div className={styles.modalContent}>
+                <h2 className={styles.modalTitle}>{dt('deleteCalendarBtn')}</h2>
+                <p className={styles.modalDesc}>{dt('deleteCalendarConfirm')}</p>
+                <div className={styles.modalActions}>
+                  <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>{ct('cancel')}</Button>
+                  <Button variant="danger" onClick={handleDelete} disabled={deleteCalendar.isPending}>{ct('delete')}</Button>
+                </div>
+              </div>
+            </Modal>
           </div>
 
           <div className={styles.previewCol}>
@@ -463,16 +479,36 @@ export default function EditCalendarPage() {
 
               <div className={styles.divider} />
 
-              <a href={webcalUrl} className={styles.calButton}>
-                <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-                <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+              <Button
+                variant="outline"
+                fullWidth
+                iconPosition="left"
+                href={webcalUrl}
+                icon={
+                  <>
+                    <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                    <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                  </>
+                }
+              >
                 {dt('addToApple')}
-              </a>
-              <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={styles.calButton}>
-                <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-                <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+              </Button>
+              <Button
+                variant="outline"
+                fullWidth
+                iconPosition="left"
+                href={googleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={
+                  <>
+                    <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                    <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                  </>
+                }
+              >
                 {dt('addToGoogle')}
-              </a>
+              </Button>
 
               <div className={styles.divider} />
 
