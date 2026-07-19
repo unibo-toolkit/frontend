@@ -72,13 +72,11 @@ export default async function LocaleLayout({
       className={inter.variable}
       suppressHydrationWarning
     >
-      <head>
+      <body className={inter.variable}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className={inter.variable}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers hasAuth={hasAuth}>{children}</Providers>
         </NextIntlClientProvider>

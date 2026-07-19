@@ -39,6 +39,7 @@ img.emoji {
 }
 
 :root {
+  /*noinspection CssUnresolvedCustomProperty*/
   --font-primary: var(--font-inter, 'Inter'), sans-serif;
   --font-mono: 'Suisse Intl', sans-serif;
 
