@@ -134,7 +134,7 @@
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
-    "createNew": "Create new calendar",
+    "createNew": "Create calendar",
     "noCalendars": "No calendars yet",
     "view": "View",
     "edit": "Edit",
