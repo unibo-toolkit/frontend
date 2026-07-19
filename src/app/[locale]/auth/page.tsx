@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import Button from '@/components/ui/Button'
 import styles from './page.module.css'
 
 function AuthContent() {
@@ -29,16 +30,36 @@ function AuthContent() {
         <div className={styles.header}>
           <h1 className={styles.title}>{t('title')}</h1>
         </div>
-        <button type="button" onClick={() => handleAuth('apple')} className={styles.authButton}>
-          <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-          <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+        <Button
+          type="button"
+          variant="outline"
+          fullWidth
+          iconPosition="left"
+          onClick={() => handleAuth('apple')}
+          icon={
+            <>
+              <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+              <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+            </>
+          }
+        >
           {t('apple')}
-        </button>
-        <button type="button" onClick={() => handleAuth('google')} className={styles.authButton}>
-          <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-          <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          fullWidth
+          iconPosition="left"
+          onClick={() => handleAuth('google')}
+          icon={
+            <>
+              <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+              <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+            </>
+          }
+        >
           {t('google')}
-        </button>
+        </Button>
         <p className={styles.agree}>
           {t('agree')}<br />
           {t('agreeOur')}{' '}

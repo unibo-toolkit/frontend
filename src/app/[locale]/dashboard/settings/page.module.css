@@ -208,23 +208,6 @@
   line-height: 1.4;
 }
 
-.dangerBtn {
-  padding: var(--spacing-16) var(--spacing-22);
-  background-color: #fd585f;
-  color: #ffffff;
-  border: none;
-  border-radius: var(--radius-full);
-  font-family: var(--font-primary), sans-serif;
-  font-size: var(--text-lg);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: opacity 0.15s;
-}
-
-.dangerBtn:hover {
-  opacity: 0.9;
-}
-
 /* Modal */
 .modalContent {
   display: flex;
@@ -277,9 +260,5 @@
   .dangerRow {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .dangerBtn {
-    width: 100%;
   }
 }

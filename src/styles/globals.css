@@ -39,7 +39,7 @@ img.emoji {
 }
 
 :root {
-  --font-primary: 'Inter Display', sans-serif;
+  --font-primary: var(--font-inter, 'Inter'), sans-serif;
   --font-mono: 'Suisse Intl', sans-serif;
 
   --radius-sm: 10px;

@@ -210,13 +210,9 @@ export default function SettingsPage() {
                 <h3 className={styles.dangerTitle}>{t('deleteAccount')}</h3>
                 <p className={styles.dangerText}>{t('deleteAccountDesc')}</p>
               </div>
-              <button
-                type="button"
-                className={styles.dangerBtn}
-                onClick={() => setShowDeleteConfirm(true)}
-              >
+              <Button variant="danger" onClick={() => setShowDeleteConfirm(true)}>
                 {t('deleteAccount')}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -227,7 +223,7 @@ export default function SettingsPage() {
             <p className={styles.modalDesc}>{t('deleteConfirm')}</p>
             <div className={styles.modalActions}>
               <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>{ct('cancel')}</Button>
-              <Button variant="primary" onClick={handleDeleteAccount}>{ct('confirm')}</Button>
+              <Button variant="danger" onClick={handleDeleteAccount}>{ct('confirm')}</Button>
             </div>
           </div>
         </Modal>

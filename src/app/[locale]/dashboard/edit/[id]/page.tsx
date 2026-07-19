@@ -240,9 +240,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('accessDenied')}</h1>
         <p>{et('accessDeniedDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -252,9 +252,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('calendarNotFound')}</h1>
         <p>{et('calendarNotFoundDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -264,9 +264,9 @@ export default function EditCalendarPage() {
       <div className={styles.errorPage}>
         <h1>{et('serverError')}</h1>
         <p>{et('serverErrorDesc')}</p>
-        <button type="button" className={styles.errorButton} onClick={goBack}>
+        <Button type="button" variant="primary" onClick={goBack}>
           {et('backToDashboard')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -424,13 +424,14 @@ export default function EditCalendarPage() {
             </div>
 
             <div className={styles.formActions}>
-              <button
-                className={styles.deleteBtn}
+              <Button
+                variant="danger"
                 onClick={handleDelete}
                 disabled={deleteCalendar.isPending}
+                fullWidth
               >
                 {deleteCalendar.isPending ? '...' : dt('deleteCalendarBtn')}
-              </button>
+              </Button>
               <Button
                 variant="primary"
                 onClick={handleSave}
@@ -463,16 +464,36 @@ export default function EditCalendarPage() {
 
               <div className={styles.divider} />
 
-              <a href={webcalUrl} className={styles.calButton}>
-                <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-                <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+              <Button
+                variant="outline"
+                fullWidth
+                iconPosition="left"
+                href={webcalUrl}
+                icon={
+                  <>
+                    <img src="/icons/apple-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                    <img src="/icons/apple-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                  </>
+                }
+              >
                 {dt('addToApple')}
-              </a>
-              <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={styles.calButton}>
-                <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
-                <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+              </Button>
+              <Button
+                variant="outline"
+                fullWidth
+                iconPosition="left"
+                href={googleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={
+                  <>
+                    <img src="/icons/google-dark.svg" width={20} height={20} alt="" className={styles.iconDark} />
+                    <img src="/icons/google-light.svg" width={20} height={20} alt="" className={styles.iconLight} />
+                  </>
+                }
+              >
                 {dt('addToGoogle')}
-              </a>
+              </Button>
 
               <div className={styles.divider} />
 

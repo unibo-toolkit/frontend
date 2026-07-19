@@ -69,6 +69,7 @@ export default async function LocaleLayout({
       lang={locale}
       data-theme={theme}
       data-auth={hasAuth ? 'true' : 'false'}
+      className={inter.variable}
       suppressHydrationWarning
     >
       <head>
