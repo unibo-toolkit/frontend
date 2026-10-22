@@ -8,9 +8,9 @@ import styles from './SubjectList.module.css'
 interface SubjectItem {
   id: string
   title: string
-  module_code?: string
+  module_code?: string | null
   group_id?: string | null
-  credits: number
+  credits?: number | null
   professor?: string | null
 }
 

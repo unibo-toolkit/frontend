@@ -8,9 +8,9 @@ export interface PaginatedResponse<T> {
 export interface Classroom {
   id: string
   name: string
-  address: string
-  latitude: number
-  longitude: number
+  address: string | null
+  latitude: number | null
+  longitude: number | null
 }
 
 export interface TimetableEvent {
@@ -22,7 +22,7 @@ export interface TimetableEvent {
   is_remote: boolean
   professor: string | null
   module_code: string | null
-  credits: number
+  credits: number | null
   teams_link: string | null
   notes: string | null
   group_id: string | null
@@ -31,14 +31,9 @@ export interface TimetableEvent {
 
 export interface PreviewResponse {
   items: TimetableEvent[]
-  from_date: string
-  to_date: string
+  from_date: string | null
+  to_date: string | null
   total: number
   courses_events_count: number
   target: TimetableEvent | null
-}
-
-export interface TimetableResponse {
-  items: TimetableEvent[]
-  total: number
 }
