@@ -13,7 +13,7 @@ dev: dev-up
 ## Frontend on real prod data (read-only bridge, no local backend needed)
 dev-prod:
 	@node dev/prod-bridge.mjs & BRIDGE=$$!; trap "kill $$BRIDGE" EXIT INT TERM; \
-	NEXT_PUBLIC_API_URL=http://localhost:8090 npm run dev
+	NEXT_PUBLIC_API_URL=http://127.0.0.1:8090 npm run dev
 
 ## Backend stack only (Postgres, Redis, migrate, auth, scraper, calendar, gateway)
 dev-up:
