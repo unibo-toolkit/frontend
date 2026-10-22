@@ -6,11 +6,13 @@ import api from '@/lib/api'
 import type { PreviewResponse } from '@/types/api'
 
 async function fetchPreview(subjectIds: string[], page: number, formatTitles: boolean): Promise<PreviewResponse> {
-  const params = new URLSearchParams()
-  subjectIds.forEach((id) => params.append('subject_ids', id))
-  params.append('page', String(page))
-  params.append('format_titles', formatTitles ? 'true' : 'false')
-  const { data } = await api.get<PreviewResponse>(`/api/v1/preview?${params.toString()}`)
+  const { data } = await api.get<PreviewResponse>('/api/v1/timetable/preview', {
+    params: {
+      subject_ids: subjectIds.join(','),
+      page,
+      format_titles: formatTitles ? 'true' : 'false',
+    },
+  })
   return data
 }
 

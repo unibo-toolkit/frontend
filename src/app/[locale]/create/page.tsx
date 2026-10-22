@@ -18,7 +18,7 @@ import { useLocale } from 'next-intl'
 import { useThemeStore } from '@/stores/themeStore'
 import { getSubjectColorPair } from '@/lib/colors'
 import type { SubjectColorPair } from '@/lib/colors'
-import type { Course, Curriculum, Calendar } from '@/types/calendar'
+import type { Course, CourseCurriculum, Calendar } from '@/types/calendar'
 import styles from './page.module.css'
 
 function cleanCurriculumLabel(label: string): string {
@@ -47,7 +47,7 @@ export default function CreatePage() {
 
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
   const [selectedYear, setSelectedYear] = useState<number | null>(null)
-  const [selectedCurriculum, setSelectedCurriculum] = useState<Curriculum | null>(null)
+  const [selectedCurriculum, setSelectedCurriculum] = useState<CourseCurriculum | null>(null)
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set())
   const [calendarName, setCalendarName] = useState('')
   const [createdCalendar, setCreatedCalendar] = useState<Calendar | null>(null)
@@ -100,7 +100,11 @@ export default function CreatePage() {
 
   const years = useMemo(() => {
     if (!selectedCourse) return []
-    const yearsSet = new Set(selectedCourse.curricula.map((c) => c.academic_year))
+    const yearsSet = new Set(
+      selectedCourse.curricula
+        .map((c) => c.academic_year)
+        .filter((year): year is number => year !== null)
+    )
     return Array.from(yearsSet).sort()
   }, [selectedCourse])
 

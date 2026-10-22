@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { headers } from 'next/headers'
 import { routing, type Locale } from '@/i18n/routing'
 import { buildPageMetadata } from '@/i18n/metadata'
-import { buildForwardedHeaders } from '@/lib/forwardHeaders'
+import { buildPublicForwardedHeaders } from '@/lib/forwardHeaders'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -15,7 +15,7 @@ async function fetchCalendar(slug: string, reqHeaders: Headers) {
   try {
     const res = await fetch(`${apiUrl}/api/v1/calendars/public/${slug}`, {
       next: { revalidate: 300 },
-      headers: buildForwardedHeaders(reqHeaders),
+      headers: buildPublicForwardedHeaders(reqHeaders),
     })
     if (!res.ok) return null
     return (await res.json()) as { name: string; total_events?: number }

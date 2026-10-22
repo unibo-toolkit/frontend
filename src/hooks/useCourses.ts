@@ -25,8 +25,8 @@ export function useSubjects(courseId: string, curriculumId: string, formatTitles
     queryKey: ['subjects', courseId, curriculumId, formatTitles],
     queryFn: async () => {
       const { data } = await api.get<{ items: Subject[] }>(
-        `/api/v1/courses/${courseId}/subjects`,
-        { params: { curriculum_id: curriculumId, format_titles: formatTitles ? 'true' : 'false' } }
+        `/api/v1/courses/${courseId}/curricula/${curriculumId}/subjects`,
+        { params: { format_titles: formatTitles ? 'true' : 'false' } }
       )
       return data.items
     },

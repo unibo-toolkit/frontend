@@ -52,7 +52,7 @@ function buildLocalizedRedirect(
   return NextResponse.redirect(url)
 }
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const appPath = stripLocale(request.nextUrl.pathname)
 
   const accessToken = request.cookies.get('access_token')?.value

@@ -13,6 +13,13 @@ export interface Curriculum {
   }
 }
 
+export interface CourseCurriculum {
+  id: string
+  code: string
+  label: string
+  academic_year: number | null
+}
+
 export interface Course {
   id: string
   unibo_id: number
@@ -23,20 +30,16 @@ export interface Course {
   duration_years: number
   url: string
   area: string
-  curricula: Curriculum[]
+  curricula: CourseCurriculum[]
 }
 
 export interface Subject {
   id: string
-  curriculum_id: string
   title: string
-  module_code: string
-  group_id: string | null
-  credits: number
+  module_code: string | null
+  credits: number | null
   professor: string | null
-  created_at: string
-  updated_at: string
-  is_active: boolean
+  group_id: string | null
 }
 
 export interface CalendarCourse {

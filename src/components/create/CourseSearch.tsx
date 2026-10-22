@@ -46,7 +46,7 @@ function formatCourseType(type: string | undefined, locale: string): string | nu
   return COURSE_TYPE_LABELS[type]?.[locale] ?? COURSE_TYPE_LABELS[type]?.['en'] ?? type
 }
 
-function normalizeCampus(campus: string | undefined): string | null {
+function normalizeCampus(campus: string | null | undefined): string | null {
   if (!campus) return null
   return CAMPUS_NAMES[campus.toUpperCase()] ?? campus
 }

@@ -32,7 +32,7 @@
 }
 
 .hero {
-  padding: 0 var(--spacing-32) var(--spacing-32);
+  padding: 0 max(var(--spacing-32), calc((100% - var(--content-max-width)) / 2 - var(--spacing-48))) var(--spacing-32);
 }
 
 .heroInner {
@@ -148,7 +148,7 @@
 }
 
 .howItWorks {
-  padding: var(--spacing-64) var(--spacing-80);
+  padding: var(--spacing-64) var(--page-gutter);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-64);
@@ -189,7 +189,7 @@
 
 .progressBarFill {
   height: 100%;
-  width: 0%;
+  width: 0;
   background-color: var(--fg-100);
   border-radius: 2px;
 }
@@ -323,7 +323,7 @@
 }
 
 .features {
-  padding: var(--spacing-64) var(--spacing-80);
+  padding: var(--spacing-64) var(--page-gutter);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -402,7 +402,7 @@
 }
 
 .cta {
-  padding: 256px var(--spacing-80) 256px;
+  padding: 256px var(--page-gutter) 256px;
   display: flex;
   flex-direction: column;
   align-items: center;
