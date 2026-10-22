@@ -3,6 +3,7 @@
   overflow: hidden;
   border-radius: 9px;
   flex-shrink: 0;
+  touch-action: pan-y;
 }
 
 :global([data-theme="light"]) .outer {
@@ -121,6 +122,10 @@
   border-radius: 999px;
   padding: 10px 18px;
   pointer-events: none;
+}
+
+.compact .viewSwitcher {
+  display: none;
 }
 
 :global([data-theme="light"]) .viewSwitcher {

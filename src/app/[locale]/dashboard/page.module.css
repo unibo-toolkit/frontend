@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-  width: 281px;
+  width: var(--dashboard-sidebar-width);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -149,7 +149,7 @@
 
 .main {
   flex: 1;
-  padding: var(--spacing-64);
+  padding: var(--spacing-64) max(var(--spacing-64), calc((100vw - var(--dashboard-sidebar-width) - var(--content-max-width)) / 2));
   overflow-y: auto;
   height: 100dvh;
 }

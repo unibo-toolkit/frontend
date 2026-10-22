@@ -10,7 +10,7 @@
   flex: 1;
   display: flex;
   gap: 60px;
-  padding: 0 var(--spacing-80) var(--spacing-32);
+  padding: 0 var(--page-gutter) var(--spacing-32);
   align-items: flex-start;
 }
 
@@ -163,10 +163,6 @@
 
   .preview {
     width: 100%;
-  }
-
-  .calendarWrapper {
-    display: none;
   }
 }
 

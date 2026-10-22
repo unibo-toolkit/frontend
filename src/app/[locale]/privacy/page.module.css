@@ -6,7 +6,7 @@
 }
 
 .hero {
-  padding: var(--spacing-80) var(--spacing-80) var(--spacing-64);
+  padding: var(--spacing-80) var(--page-gutter) var(--spacing-64);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-16);
@@ -26,7 +26,7 @@
 
 .content {
   flex: 1;
-  padding: 0 var(--spacing-80) var(--spacing-80);
+  padding: 0 var(--page-gutter) var(--spacing-80);
   color: var(--fg-200);
   line-height: 1.7;
   font-size: var(--text-lg);

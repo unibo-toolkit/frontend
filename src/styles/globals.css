@@ -64,6 +64,10 @@ img.emoji {
   --spacing-64: 64px;
   --spacing-80: 80px;
 
+  --content-max-width: 1600px;
+  --page-gutter: max(var(--spacing-80), calc((100% - var(--content-max-width)) / 2));
+  --dashboard-sidebar-width: 281px;
+
   --text-xs: 12px;
   --text-sm: 14px;
   --text-base: 16px;

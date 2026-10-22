@@ -22,19 +22,24 @@ interface CalendarPreviewProps {
 }
 
 const DESIGN_WIDTH  = 700
-const DAY_HDR_H     = 22
-const ALL_DAY_H     = 22
-const TOOLBAR_H     = 52
-const MONTH_H       = 49
-const HOUR_HEIGHT   = 40
-const START_HOUR    = 8
-const END_HOUR      = 19
-const NUM_HOURS     = END_HOUR - START_HOUR + 1
+const COMPACT_BREAKPOINT    = 560
+const COMPACT_DESIGN_WIDTH  = 380
+const COMPACT_DAYS          = 3
+const DAY_HDR_H             = 22
+const ALL_DAY_H             = 22
+const TOOLBAR_H             = 52
+const MONTH_H               = 49
+const HOUR_HEIGHT           = 40
+const START_HOUR            = 8
+const END_HOUR              = 19
+const NUM_HOURS             = END_HOUR - START_HOUR + 1
 
 export const DESIGN_HEIGHT =
   TOOLBAR_H + MONTH_H + DAY_HDR_H + ALL_DAY_H + NUM_HOURS * HOUR_HEIGHT
 
 const SWIPE_THRESHOLD = 50
+const AXIS_LOCK_DISTANCE = 8
+const EDGE_GUARD = 32
 
 const FALLBACK_COLORS: SubjectColorPair = {
   bg: '#133d3f',
@@ -99,19 +104,63 @@ export default function CalendarPreview({
 }: CalendarPreviewProps) {
   const a11y = useTranslations('a11y')
   const outerRef = useRef<HTMLDivElement>(null)
-  const [scale, setScale] = useState<number | null>(null)
+  const [containerWidth, setContainerWidth] = useState<number | null>(null)
 
   useEffect(() => {
     const el = outerRef.current
     if (!el) return
     const ro = new ResizeObserver(([entry]) => {
-      setScale(entry.contentRect.width / DESIGN_WIDTH)
+      setContainerWidth(entry.contentRect.width)
     })
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
 
+  const compact = containerWidth !== null && containerWidth < COMPACT_BREAKPOINT
+  const designWidth = compact ? COMPACT_DESIGN_WIDTH : DESIGN_WIDTH
+  const scale = containerWidth !== null ? containerWidth / designWidth : null
+
   const weekDates = useMemo(() => getWeekDates(currentDate), [currentDate])
+  const weekKey = weekDates[0].toDateString()
+
+  const todayIndex = weekDates.findIndex((d) => d.toDateString() === new Date().toDateString())
+  const todayDayPage = todayIndex >= COMPACT_DAYS ? 1 : 0
+  const [dayPage, setDayPage] = useState(todayIndex >= 0 ? todayDayPage : 0)
+  const pendingDayPage = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (pendingDayPage.current !== null) {
+      setDayPage(pendingDayPage.current)
+      pendingDayPage.current = null
+    } else {
+      setDayPage(todayIndex >= 0 ? todayDayPage : 0)
+    }
+  }, [weekKey])
+
+  const goPrev = useCallback(() => {
+    if (compact && dayPage > 0) return setDayPage(dayPage - 1)
+    if (compact) pendingDayPage.current = 1
+    onWeekChange('prev')
+  }, [compact, dayPage, onWeekChange])
+
+  const goNext = useCallback(() => {
+    if (compact && dayPage < 1) return setDayPage(dayPage + 1)
+    if (compact) pendingDayPage.current = 0
+    onWeekChange('next')
+  }, [compact, dayPage, onWeekChange])
+
+  const showToday = !!onToday && !disableNavigation &&
+    (!isOnToday || (compact && todayIndex >= 0 && dayPage !== todayDayPage))
+
+  const goToday = useCallback(() => {
+    if (isOnToday) return setDayPage(todayDayPage)
+    pendingDayPage.current = (new Date().getDay() || 7) - 1 >= COMPACT_DAYS ? 1 : 0
+    onToday?.()
+  }, [isOnToday, todayDayPage, onToday])
+
+  const visibleDays = compact
+    ? weekDates.map((date, dayIndex) => ({ date, dayIndex })).slice(dayPage * COMPACT_DAYS, (dayPage + 1) * COMPACT_DAYS)
+    : weekDates.map((date, dayIndex) => ({ date, dayIndex }))
   const hours = useMemo(
     () => Array.from({ length: NUM_HOURS }, (_, i) => START_HOUR + i),
     []
@@ -139,31 +188,68 @@ export default function CalendarPreview({
     return map
   }, [events])
 
-  const touchStartX = useRef<number | null>(null)
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
+  const swipeHandlers = useRef({ goPrev, goNext })
+  swipeHandlers.current = { goPrev, goNext }
+
+  useEffect(() => {
+    const el = outerRef.current
+    if (!el) return
+
+    let start: { x: number; y: number } | null = null
+    let axis: 'x' | 'y' | null = null
+
+    const onStart = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      start = { x: touch.clientX, y: touch.clientY }
+      axis = null
+      if (touch.clientX < EDGE_GUARD || touch.clientX > window.innerWidth - EDGE_GUARD) {
+        e.preventDefault()
+      }
+    }
+
+    const onMove = (e: TouchEvent) => {
+      if (!start) return
+      const dx = e.touches[0].clientX - start.x
+      const dy = e.touches[0].clientY - start.y
+      if (!axis && Math.max(Math.abs(dx), Math.abs(dy)) > AXIS_LOCK_DISTANCE) {
+        axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+      }
+      if (axis === 'x' && e.cancelable) e.preventDefault()
+    }
+
+    const onEnd = (e: TouchEvent) => {
+      if (start && axis === 'x') {
+        const dx = e.changedTouches[0].clientX - start.x
+        if (Math.abs(dx) > SWIPE_THRESHOLD) {
+          if (dx > 0) swipeHandlers.current.goPrev()
+          else swipeHandlers.current.goNext()
+        }
+      }
+      start = null
+      axis = null
+    }
+
+    el.addEventListener('touchstart', onStart, { passive: false })
+    el.addEventListener('touchmove', onMove, { passive: false })
+    el.addEventListener('touchend', onEnd)
+    el.addEventListener('touchcancel', onEnd)
+    return () => {
+      el.removeEventListener('touchstart', onStart)
+      el.removeEventListener('touchmove', onMove)
+      el.removeEventListener('touchend', onEnd)
+      el.removeEventListener('touchcancel', onEnd)
+    }
   }, [])
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      if (touchStartX.current === null) return
-      const diff = e.changedTouches[0].clientX - touchStartX.current
-      if (Math.abs(diff) > SWIPE_THRESHOLD) onWeekChange(diff > 0 ? 'prev' : 'next')
-      touchStartX.current = null
-    },
-    [onWeekChange]
-  )
 
   return (
     <div
       ref={outerRef}
       className={styles.outer}
       style={{ height: scale !== null ? `${DESIGN_HEIGHT * scale}px` : undefined, visibility: scale !== null ? 'visible' : 'hidden' }}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <div
-        className={styles.container}
-        style={{ transform: `scale(${scale ?? 1})`, transformOrigin: 'top left', width: `${DESIGN_WIDTH}px` }}
+        className={`${styles.container} ${compact ? styles.compact : ''}`}
+        style={{ transform: `scale(${scale ?? 1})`, transformOrigin: 'top left', width: `${designWidth}px` }}
       >
         <div className={styles.toolbarRow}>
           <div className={styles.toolbarLeft}>
@@ -173,18 +259,18 @@ export default function CalendarPreview({
               <div className={`${styles.dot} ${styles.dotGreen}`} />
             </div>
             <div className={styles.navBtnGroup}>
-              <button className={styles.navBtn} onClick={() => onWeekChange('prev')} aria-label={a11y('prevWeek')} disabled={disableNavigation}>
+              <button className={styles.navBtn} onClick={goPrev} aria-label={a11y('prevWeek')} disabled={disableNavigation}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M9 11L5 7L9 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
-              <button className={styles.navBtn} onClick={() => onWeekChange('next')} aria-label={a11y('nextWeek')} disabled={disableNavigation}>
+              <button className={styles.navBtn} onClick={goNext} aria-label={a11y('nextWeek')} disabled={disableNavigation}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M5 11L9 7L5 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
-              {onToday && !isOnToday && !disableNavigation && (
-                <button className={styles.todayBtn} onClick={onToday}>
+              {showToday && (
+                <button className={styles.todayBtn} onClick={goToday}>
                   {todayLabel}
                 </button>
               )}
@@ -224,7 +310,7 @@ export default function CalendarPreview({
           </div>
 
           <div className={styles.daysContainer}>
-            {weekDates.map((date, dayIndex) => {
+            {visibleDays.map(({ date, dayIndex }) => {
               const dayEvents = eventsByDay.get(dayIndex) || []
               const groups = groupOverlapping(dayEvents)
               const today = new Date()

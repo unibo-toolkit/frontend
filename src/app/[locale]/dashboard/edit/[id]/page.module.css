@@ -6,7 +6,7 @@
 
 .main {
   flex: 1;
-  padding: var(--spacing-48) var(--spacing-64);
+  padding: var(--spacing-48) max(var(--spacing-64), calc((100vw - var(--dashboard-sidebar-width) - var(--content-max-width)) / 2));
   overflow-y: auto;
   height: 100vh;
 }
@@ -343,11 +343,6 @@
   .previewCol {
     width: 100%;
   }
-
-  /* Hide calendar preview canvas but keep the ics card */
-  .previewLabel {
-    display: none;
-  }
 }
 
 /* Responsive: mobile */
@@ -380,13 +375,8 @@
     gap: var(--spacing-8);
   }
 
-  /* Hide calendar preview column on mobile, keep only the form/ics card column */
   .content {
     flex-direction: column;
-  }
-
-  .previewCol {
-    display: none;
   }
 
   /* Breadcrumb becomes multi-line on mobile — each item + separator on its own line */
