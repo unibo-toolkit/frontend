@@ -7,9 +7,10 @@ export const alt = 'UniPlanner'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-export default async function Image({ params }: { params: { locale: string } }) {
-  const locale = hasLocale(routing.locales, params.locale)
-    ? params.locale
+export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params
+  const locale = hasLocale(routing.locales, rawLocale)
+    ? rawLocale
     : routing.defaultLocale
   const t = await getTranslations({ locale, namespace: 'hero' })
   const tFooter = await getTranslations({ locale, namespace: 'create.created' })
