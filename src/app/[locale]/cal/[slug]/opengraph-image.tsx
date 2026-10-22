@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { hasLocale } from 'next-intl'
 import { headers } from 'next/headers'
 import { routing } from '@/i18n/routing'
-import { buildForwardedHeaders } from '@/lib/forwardHeaders'
+import { buildPublicForwardedHeaders } from '@/lib/forwardHeaders'
 
 export const alt = 'UniPlanner — Shared calendar'
 export const size = { width: 1200, height: 630 }
@@ -14,7 +14,7 @@ async function fetchCalendar(slug: string, reqHeaders: Headers) {
   try {
     const res = await fetch(`${apiUrl}/api/v1/calendars/public/${slug}`, {
       next: { revalidate: 300 },
-      headers: buildForwardedHeaders(reqHeaders),
+      headers: buildPublicForwardedHeaders(reqHeaders),
     })
     if (!res.ok) return null
     return (await res.json()) as {

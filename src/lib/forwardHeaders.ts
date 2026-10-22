@@ -48,3 +48,12 @@ export function buildForwardedHeaders(
 
   return headers
 }
+
+// For requests to the public domain (behind Cloudflare): Cloudflare rejects
+// requests carrying cf-connecting-ip with 403 "error code: 1000".
+// The client IP is still passed via x-forwarded-for / x-real-ip.
+export function buildPublicForwardedHeaders(source: NextRequest | Headers): Headers {
+  const headers = buildForwardedHeaders(source)
+  headers.delete('cf-connecting-ip')
+  return headers
+}
