@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useSearchCourses } from '@/hooks/useCourses'
-import Twemoji from '@/components/ui/Twemoji'
 import type { Course } from '@/types/calendar'
 import styles from './CourseSearch.module.css'
 
@@ -15,12 +14,14 @@ interface CourseSearchProps {
 }
 
 const LANG_FLAGS: Record<string, string> = {
-  it: '🇮🇹',
-  en: '🇬🇧',
-  de: '🇩🇪',
-  fr: '🇫🇷',
-  es: '🇪🇸',
+  it: '/icons/flags/it.svg',
+  en: '/icons/flags/gb.svg',
+  de: '/icons/flags/de.svg',
+  fr: '/icons/flags/fr.svg',
+  es: '/icons/flags/es.svg',
 }
+
+const SEARCH_DEBOUNCE_MS = 250
 
 const COURSE_TYPE_LABELS: Record<string, Record<string, string>> = {
   Bachelor: { en: "Bachelor's Degree", it: 'Laurea Triennale' },
@@ -37,9 +38,6 @@ const CAMPUS_NAMES: Record<string, string> = {
   RIMINI: 'Rimini',
 }
 
-function formatLanguages(langs: string[]): string {
-  return langs.map((l) => LANG_FLAGS[l.toLowerCase()] || l.toUpperCase()).join(' ')
-}
 
 function formatCourseType(type: string | undefined, locale: string): string | null {
   if (!type) return null
@@ -62,31 +60,54 @@ export default function CourseSearch({ onSelect, selectedCourse, courseType, onC
   const t = useTranslations('create')
   const locale = useLocale()
   const [query, setQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const filtersRef = useRef<HTMLDivElement>(null)
 
-  const { data, isLoading } = useSearchCourses(query, locale, isOpen, courseType || undefined)
+  const { data, isLoading, isPlaceholderData } = useSearchCourses(debouncedQuery, locale, isOpen, courseType || undefined)
+  const isStale = isPlaceholderData || query.trim() !== debouncedQuery
 
   useEffect(() => {
-    setQuery('')
+    const timer = setTimeout(() => setDebouncedQuery(query.trim()), SEARCH_DEBOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [query])
+
+  useEffect(() => {
+    for (const src of Object.values(LANG_FLAGS)) new Image().src = src
+  }, [])
+
+  useEffect(() => {
     setIsOpen(false)
   }, [selectedCourse])
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+    function handleClickOutside(e: PointerEvent) {
+      const target = e.target as Element
+      const inside =
+        inputRef.current?.contains(target) ||
+        dropdownRef.current?.contains(target) ||
+        (filtersRef.current?.contains(target) && target.closest('button'))
+      if (!inside) {
         setIsOpen(false)
+        if (document.activeElement === inputRef.current) inputRef.current?.blur()
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('pointerdown', handleClickOutside)
+    return () => document.removeEventListener('pointerdown', handleClickOutside)
   }, [])
 
-  const displayValue = isOpen ? query : (selectedCourse?.title ?? '')
+  const open = () => {
+    setIsOpen(true)
+    requestAnimationFrame(() => inputRef.current?.select())
+  }
+
+  const displayValue = isOpen ? query : (selectedCourse?.title ?? query)
 
   return (
-    <div className={styles.wrapper} ref={wrapperRef}>
-      <div className={styles.filters}>
+    <div className={styles.wrapper}>
+      <div className={styles.filters} ref={filtersRef}>
         {FILTER_OPTIONS.map((opt) => (
           <button
             key={opt.value}
@@ -103,29 +124,36 @@ export default function CourseSearch({ onSelect, selectedCourse, courseType, onC
         type="text"
         placeholder={t('searchPlaceholder')}
         value={displayValue}
+        ref={inputRef}
+        enterKeyHint="search"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         onChange={(e) => {
           setQuery(e.target.value)
           setIsOpen(true)
         }}
-        onFocus={() => {
-          setQuery('')
-          setIsOpen(true)
+        onFocus={open}
+        onClick={() => !isOpen && open()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setIsOpen(false)
+          if (e.key === 'Enter') inputRef.current?.blur()
         }}
       />
       {isOpen && (
-        <div className={styles.dropdown}>
-          {isLoading ? (
+        <div className={`${styles.dropdown} ${isStale && data ? styles.stale : ''}`} ref={dropdownRef}>
+          {isLoading && !data ? (
             <div className={styles.loading}>{t('searching')}</div>
           ) : !data?.items.length ? (
             <div className={styles.empty}>{t('noResults')}</div>
           ) : (
             data.items.map((course) => {
-              const flags = formatLanguages(course.languages || [])
+              const languages = course.languages || []
               const metaLine = [
                 formatCourseType(course.course_type, locale),
                 course.duration_years ? `${course.duration_years} ${t('years')}` : null,
                 normalizeCampus(course.campus),
-                flags || null,
               ]
                 .filter(Boolean)
                 .join(' · ')
@@ -138,11 +166,23 @@ export default function CourseSearch({ onSelect, selectedCourse, courseType, onC
                   onClick={() => {
                     onSelect(course)
                     setIsOpen(false)
-                    setQuery('')
                   }}
                 >
                   <span className={styles.courseTitle}>{course.title}</span>
-                  {metaLine && <Twemoji className={styles.courseMeta}>{metaLine}</Twemoji>}
+                  {(metaLine || languages.length > 0) && (
+                    <span className={styles.courseMeta}>
+                      {metaLine}
+                      {metaLine && languages.length > 0 && ' · '}
+                      {languages.map((lang) => {
+                        const flag = LANG_FLAGS[lang.toLowerCase()]
+                        return flag ? (
+                          <img key={lang} src={flag} alt={lang.toUpperCase()} className={styles.flag} draggable={false} />
+                        ) : (
+                          <span key={lang} className={styles.flagText}>{lang.toUpperCase()}</span>
+                        )
+                      })}
+                    </span>
+                  )}
                   {course.area && <span className={styles.courseArea}>{course.area}</span>}
                 </button>
               )

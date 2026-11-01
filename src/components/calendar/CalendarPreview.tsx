@@ -19,6 +19,7 @@ interface CalendarPreviewProps {
   todayLabel?: string
   calViewLabels?: [string, string, string, string]
   disableNavigation?: boolean
+  onEventClick?: (event: TimetableEvent) => void
 }
 
 const DESIGN_WIDTH  = 700
@@ -101,6 +102,7 @@ export default function CalendarPreview({
   isOnToday = true,
   todayLabel = 'Today',
   disableNavigation = false,
+  onEventClick,
 }: CalendarPreviewProps) {
   const a11y = useTranslations('a11y')
   const outerRef = useRef<HTMLDivElement>(null)
@@ -338,6 +340,7 @@ export default function CalendarPreview({
                             key={event.id}
                             event={event}
                             colors={subjectColors.get(event.subject_id) ?? FALLBACK_COLORS}
+                            onClick={onEventClick}
                             style={{
                               ...posStyle,
                               width: `calc(${colW}% - 4px)`,

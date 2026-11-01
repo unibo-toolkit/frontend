@@ -17,10 +17,6 @@
   color: var(--fg-200);
 }
 
-.percentage {
-  color: var(--fg-100);
-}
-
 .track {
   height: 8px;
   background-color: var(--bg-150);

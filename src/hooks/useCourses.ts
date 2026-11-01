@@ -17,6 +17,7 @@ export function useSearchCourses(query: string, lang: string, enabled = false, c
     },
     enabled,
     staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
   })
 }
 
@@ -32,6 +33,7 @@ export function useSubjects(courseId: string, curriculumId: string, formatTitles
     },
     enabled: !!courseId && !!curriculumId,
     staleTime: 5 * 60 * 1000,
-    placeholderData: keepPreviousData,
+    placeholderData: (previous, previousQuery) =>
+      previousQuery?.queryKey[1] === courseId && previousQuery?.queryKey[2] === curriculumId ? previous : undefined,
   })
 }

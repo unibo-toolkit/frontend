@@ -10,6 +10,8 @@ import { useLocale } from 'next-intl'
 import { useThemeStore } from '@/stores/themeStore'
 import SubjectList from '@/components/create/SubjectList'
 import CalendarPreview from '@/components/calendar/CalendarPreview'
+import ExclusionHint, { useExclusionHint } from '@/components/calendar/ExclusionHint'
+import ExcludedFamilyList from '@/components/create/ExcludedFamilyList'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
 import { Plus } from '@/components/ui/icons'
@@ -17,6 +19,8 @@ import Skeleton from '@/components/ui/Skeleton'
 import { useCalendar, useUpdateCalendar, useDeleteCalendar } from '@/hooks/useCalendars'
 import { useSubjects } from '@/hooks/useCourses'
 import { usePreview } from '@/hooks/usePreview'
+import { useFamilyExclusions } from '@/hooks/useFamilyExclusions'
+import type { TimetableEvent } from '@/types/api'
 import { getSubjectColorPair } from '@/lib/colors'
 import type { SubjectColorPair } from '@/lib/colors'
 import dashboardStyles from '../../page.module.css'
@@ -92,7 +96,24 @@ export default function EditCalendarPage() {
   }, [courseData])
 
   const subjectIds = useMemo(() => Array.from(selectedSubjects), [selectedSubjects])
-  const { data: previewData } = usePreview(subjectIds, apiPage, formatTitles)
+  const exclusions = useFamilyExclusions(selectedSubjects, true)
+  const exclusionHint = useExclusionHint()
+  const { reset: resetExclusions, trackPreview } = exclusions
+
+  useEffect(() => {
+    if (calendar) resetExclusions(calendar.excluded_families ?? [])
+  }, [calendar, resetExclusions])
+
+  const handleEventClick = (event: TimetableEvent) => {
+    exclusions.toggleEvent(event)
+    exclusionHint.dismiss()
+  }
+
+  const { data: previewData } = usePreview(subjectIds, apiPage, formatTitles, exclusions.hashes)
+
+  useEffect(() => {
+    trackPreview(previewData?.excluded_families)
+  }, [previewData?.excluded_families, trackPreview])
 
   useEffect(() => {
     if (previewData?.target?.start_datetime && apiPage === 0 && displayPage === 0) {
@@ -112,11 +133,13 @@ export default function EditCalendarPage() {
     const weekStart = new Date(currentDate)
     const weekEnd = new Date(currentDate)
     weekEnd.setDate(weekEnd.getDate() + 7)
-    return previewData.items.filter((e) => {
-      const d = new Date(e.start_datetime)
-      return d >= weekStart && d < weekEnd && selectedSubjects.has(e.subject_id)
-    })
-  }, [previewData?.items, currentDate, subjectIds.length, selectedSubjects])
+    return previewData.items
+      .filter((e) => {
+        const d = new Date(e.start_datetime)
+        return d >= weekStart && d < weekEnd && selectedSubjects.has(e.subject_id)
+      })
+      .map((e) => ({ ...e, excluded: exclusions.isExcluded(e.family_hash) }))
+  }, [previewData?.items, currentDate, subjectIds.length, selectedSubjects, exclusions.isExcluded])
 
   const subjectColors = useMemo(() => {
     const map = new Map<string, SubjectColorPair>()
@@ -202,6 +225,7 @@ export default function EditCalendarPage() {
       lang: calendarLang,
       format_event_titles: formatTitles,
       courses: [{ curriculum_id: curriculumId, subject_ids: Array.from(selectedSubjects) }],
+      excluded_families: exclusions.payload,
     })
     goBack()
   }
@@ -215,7 +239,9 @@ export default function EditCalendarPage() {
   const icsUrl = calendar ? `https://uniplanner.it/cal/${calendar.slug}.ics` : ''
   const webcalUrl = icsUrl.replace('https://', 'webcal://')
   const googleUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(webcalUrl)}`
-  const totalEvents = subjectIds.length > 0 ? (previewData?.courses_events_count || 0) : 0
+  const totalEvents = subjectIds.length > 0
+    ? Math.max(0, (previewData?.courses_events_count || 0) - exclusions.excludedEventCount)
+    : 0
   const lastSync = calendar?.created_at ? new Date(calendar.created_at).toLocaleString() : ''
   const expires = calendar?.ttl_expires_at ? new Date(calendar.ttl_expires_at).toLocaleDateString() : ''
 
@@ -359,7 +385,7 @@ export default function EditCalendarPage() {
 
         <div className={styles.content}>
           <div className={styles.formCol}>
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.blockSettings}`}>
               <span className={styles.settingsTitle}>{t('calendarSettings')}</span>
 
               <div className={styles.settingRow}>
@@ -396,7 +422,7 @@ export default function EditCalendarPage() {
               </div>
             </div>
 
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.blockName}`}>
               <label className={styles.fieldLabel}>{dt('calendarNameLabel')}</label>
               <input
                 type="text"
@@ -407,7 +433,7 @@ export default function EditCalendarPage() {
               />
             </div>
 
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.blockSubjects}`}>
               <div className={styles.subjectsHeader}>
                 <span className={styles.subjectsTitle}>{dt('subjectsTitle')}</span>
                 <span className={styles.subjectsCount}>
@@ -427,7 +453,13 @@ export default function EditCalendarPage() {
               )}
             </div>
 
-            <div className={styles.formActions}>
+            {exclusions.families.length > 0 && (
+              <div className={`${styles.card} ${styles.blockFamilies}`}>
+                <ExcludedFamilyList families={exclusions.families} onRestore={exclusions.restore} />
+              </div>
+            )}
+
+            <div className={`${styles.formActions} ${styles.blockActions}`}>
               <Button
                 variant="danger"
                 onClick={() => setShowDeleteConfirm(true)}
@@ -459,21 +491,25 @@ export default function EditCalendarPage() {
           </div>
 
           <div className={styles.previewCol}>
-            <span className={styles.previewLabel}>{dt('previewLabel')}</span>
-            <CalendarPreview
-              events={weekEvents}
-              subjectColors={selectedSubjectColors}
-              currentDate={currentDate}
-              onWeekChange={handleWeekChange}
-              onToday={handleToday}
-              isOnToday={isOnToday}
-              locale={locale}
-              allDayLabel={t('allDay')}
-              todayLabel={t('today')}
-              calViewLabels={[t('calViewDay'), t('calViewWeek'), t('calViewMonth'), t('calViewYear')]}
-            />
+            <div className={styles.blockPreview}>
+              <span className={styles.previewLabel}>{dt('previewLabel')}</span>
+              <CalendarPreview
+                events={weekEvents}
+                subjectColors={selectedSubjectColors}
+                currentDate={currentDate}
+                onWeekChange={handleWeekChange}
+                onEventClick={handleEventClick}
+                onToday={handleToday}
+                isOnToday={isOnToday}
+                locale={locale}
+                allDayLabel={t('allDay')}
+                todayLabel={t('today')}
+                calViewLabels={[t('calViewDay'), t('calViewWeek'), t('calViewMonth'), t('calViewYear')]}
+              />
+              {selectedSubjects.size > 0 && <ExclusionHint visible={exclusionHint.visible} />}
+            </div>
 
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.blockInfo}`}>
               <span className={styles.icsSectionLabel}>{dt('icsLinkLabel')}</span>
               <div className={styles.icsUrl}>{icsUrl}</div>
 

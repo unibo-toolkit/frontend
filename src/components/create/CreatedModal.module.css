@@ -45,11 +45,6 @@
   gap: var(--spacing-12);
 }
 
-.signInLink {
-  color: var(--fg-100);
-  text-decoration: underline;
-  cursor: pointer;
-}
 
 .howToSection {
   display: flex;
@@ -103,8 +98,17 @@
   }
 
   .footer {
-    flex-direction: row;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: var(--spacing-12);
+  }
+
+  .footer a,
+  .footer button {
+    width: 100%;
+  }
+
+  .footerPrimary {
+    order: -1;
   }
 }
 

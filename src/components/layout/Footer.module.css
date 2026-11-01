@@ -51,6 +51,22 @@
   color: var(--fg-250);
 }
 
+.credits {
+  font-size: var(--text-sm);
+  color: var(--fg-250);
+}
+
+.credits a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+
+.credits a:hover {
+  color: var(--fg-150);
+}
+
 @media (max-width: 1440px) {
   .footer {
     padding: var(--spacing-24) var(--spacing-32);

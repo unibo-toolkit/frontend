@@ -46,7 +46,8 @@
     "github": "Github",
     "privacy": "Privacy Policy",
     "terms": "Termini di Servizio",
-    "copyright": "© 2026 UniPlanner"
+    "copyright": "© 2026 UniPlanner",
+    "credits": "Icone delle bandiere di <twemoji>Twemoji</twemoji> (© Twitter, Inc e altri contributori), con licenza <license>CC-BY 4.0</license>"
   },
   "auth": {
     "title": "Accedi a UniPlanner",
@@ -88,7 +89,7 @@
     "preview": "Anteprima del calendario",
     "createButton": "Crea il mio calendario",
     "calendarSettings": "Impostazioni calendario",
-    "calendarLang": "Lingua del calendario",
+    "calendarLang": "Lingua",
     "calendarLangHint": "Influisce sulle etichette come CFU, Docente, ecc. nel calendario",
     "formatTitles": "Formatta titoli eventi",
     "formatTitlesHint": "Converte i titoli MAIUSCOLI in formato leggibile",
@@ -104,6 +105,7 @@
     "calViewMonth": "Mese",
     "calViewYear": "Anno",
     "noCurricula": "Nessun curriculum disponibile per questo corso.",
+    "noSubjects": "Nessuna materia trovata per questo curriculum. Prova un altro anno o curriculum.",
     "searchSubjects": "Cerca materie...",
     "today": "Oggi",
     "ttlWarning": "Il tuo link resta attivo finché viene utilizzato dal tuo calendario.",
@@ -131,6 +133,19 @@
       "createOwn": "Crea il tuo calendario",
       "previewLabel": "Anteprima del calendario"
     }
+  },
+  "exclusions": {
+    "title": "Lezioni escluse",
+    "restoreLabel": "Ripristina {title}",
+    "lessons": "{count, plural, one {# lezione} other {# lezioni}}",
+    "hintTitle": "Non frequenti alcune lezioni?",
+    "hintText": "Clicca una lezione nell’anteprima per escluderla ogni settimana. Le lezioni escluse non compariranno nel tuo calendario.",
+    "learnMore": "Scopri di più",
+    "modalTitle": "Escludi le lezioni che non frequenti",
+    "step1": "Clicca una lezione nell’anteprima. Vengono escluse tutte le lezioni di quella materia nello stesso orario settimanale, ad esempio tutti i laboratori del lunedì alle 13:00.",
+    "step2": "Le lezioni escluse diventano grigie nell’anteprima e compaiono in “Lezioni escluse”.",
+    "step3": "Clicca una lezione esclusa, o la sua scheda nell’elenco, per ripristinarla. Le modifiche si applicano quando salvi il calendario.",
+    "gotIt": "Ho capito"
   },
   "dashboard": {
     "welcome": "Benvenuto, {name}",

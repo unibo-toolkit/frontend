@@ -60,3 +60,16 @@
   height: 9px;
   flex-shrink: 0;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--fg-100);
+  outline-offset: 1px;
+}
+
+.excluded .title {
+  text-decoration: line-through;
+}

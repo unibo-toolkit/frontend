@@ -26,7 +26,11 @@ export interface TimetableEvent {
   teams_link: string | null
   notes: string | null
   group_id: string | null
+  family_hash: string
+  weekday: number
+  slot_start: string
   classroom: Classroom | null
+  excluded: boolean
 }
 
 export interface PreviewResponse {
@@ -36,4 +40,18 @@ export interface PreviewResponse {
   total: number
   courses_events_count: number
   target: TimetableEvent | null
+  excluded_events_count: number
+  excluded_families: ExcludedFamily[]
+}
+
+export interface ExcludedFamily {
+  family_hash: string
+  subject_id: string
+  title: string
+  group_id: string | null
+  weekday: number
+  slot_start: string
+  events: number
+  first_at: string
+  last_at: string
 }

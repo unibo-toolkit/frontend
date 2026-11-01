@@ -7,11 +7,15 @@ import StepWizard from '@/components/create/StepWizard'
 import CourseSearch from '@/components/create/CourseSearch'
 import SubjectList from '@/components/create/SubjectList'
 import CalendarPreview from '@/components/calendar/CalendarPreview'
+import ExclusionHint, { useExclusionHint } from '@/components/calendar/ExclusionHint'
+import ExcludedFamilyList from '@/components/create/ExcludedFamilyList'
 import CreatedModal from '@/components/create/CreatedModal'
 import Button from '@/components/ui/Button'
 import InfoCard from '@/components/ui/InfoCard'
 import { useSubjects } from '@/hooks/useCourses'
 import { usePreview } from '@/hooks/usePreview'
+import { useFamilyExclusions } from '@/hooks/useFamilyExclusions'
+import type { TimetableEvent } from '@/types/api'
 import { useCreateCalendar } from '@/hooks/useCalendars'
 import { useAuthStore } from '@/stores/authStore'
 import { useLocale } from 'next-intl'
@@ -65,7 +69,20 @@ export default function CreatePage() {
   const { data: subjects, isLoading: subjectsLoading } = useSubjects(courseId, curriculumId, formatTitles)
 
   const subjectIds = useMemo(() => Array.from(selectedSubjects), [selectedSubjects])
-  const { data: previewData, isFetching: previewFetching } = usePreview(subjectIds, apiPage, formatTitles)
+  const exclusions = useFamilyExclusions(selectedSubjects)
+  const exclusionHint = useExclusionHint()
+
+  const handleEventClick = (event: TimetableEvent) => {
+    exclusions.toggleEvent(event)
+    exclusionHint.dismiss()
+  }
+
+  const { data: previewData, isFetching: previewFetching } = usePreview(subjectIds, apiPage, formatTitles, exclusions.hashes)
+
+  const { trackPreview } = exclusions
+  useEffect(() => {
+    trackPreview(previewData?.excluded_families)
+  }, [previewData?.excluded_families, trackPreview])
 
   const [anchorMonday, setAnchorMonday] = useState<Date | null>(null)
 
@@ -87,11 +104,13 @@ export default function CreatePage() {
     const weekStart = new Date(currentDate)
     const weekEnd = new Date(currentDate)
     weekEnd.setDate(weekEnd.getDate() + 7)
-    return previewData.items.filter((e) => {
-      const d = new Date(e.start_datetime)
-      return d >= weekStart && d < weekEnd && selectedSubjects.has(e.subject_id)
-    })
-  }, [previewData?.items, currentDate, subjectIds.length, selectedSubjects])
+    return previewData.items
+      .filter((e) => {
+        const d = new Date(e.start_datetime)
+        return d >= weekStart && d < weekEnd && selectedSubjects.has(e.subject_id)
+      })
+      .map((e) => ({ ...e, excluded: exclusions.isExcluded(e.family_hash) }))
+  }, [previewData?.items, currentDate, subjectIds.length, selectedSubjects, exclusions.isExcluded])
 
   const createCalendar = useCreateCalendar()
 
@@ -179,6 +198,7 @@ export default function CreatePage() {
           subject_ids: Array.from(selectedSubjects),
         },
       ],
+      excluded_families: exclusions.payload,
     })
     setCreatedCalendar(result)
     setShowCreatedModal(true)
@@ -208,6 +228,7 @@ export default function CreatePage() {
 
   const showSubjectSkeleton = !!curriculumId && subjectsLoading
   const noCurricula = !!selectedCourse && years.length === 0
+  const noSubjects = !!curriculumId && !subjectsLoading && subjects?.length === 0
   const isSingleCurriculum = curricula.length === 1
 
   return (
@@ -234,7 +255,7 @@ export default function CreatePage() {
             />
 
             {noCurricula && (
-              <p className={styles.noCurricula}>{t('noCurricula')}</p>
+              <p className={styles.emptyNote}>{t('noCurricula')}</p>
             )}
 
             {selectedCourse && years.length > 0 && (
@@ -292,6 +313,10 @@ export default function CreatePage() {
               />
             )}
 
+            {noSubjects && (
+              <p className={styles.emptyNote}>{t('noSubjects')}</p>
+            )}
+
             {subjects && subjects.length > 0 && (
               <SubjectList
                 subjects={subjects}
@@ -304,6 +329,10 @@ export default function CreatePage() {
                 showCount
               />
             )}
+
+            <div className={styles.familiesBesideSubjects}>
+              <ExcludedFamilyList families={exclusions.families} onRestore={exclusions.restore} />
+            </div>
           </StepWizard>
         </div>
 
@@ -315,6 +344,7 @@ export default function CreatePage() {
               subjectColors={selectedSubjectColors}
               currentDate={currentDate}
               onWeekChange={handleWeekChange}
+              onEventClick={handleEventClick}
               onToday={handleToday}
               isOnToday={isOnToday}
               locale={locale}
@@ -322,6 +352,11 @@ export default function CreatePage() {
               todayLabel={t('today')}
               calViewLabels={[t('calViewDay'), t('calViewWeek'), t('calViewMonth'), t('calViewYear')]}
             />
+            {selectedSubjects.size > 0 && <ExclusionHint visible={exclusionHint.visible} />}
+          </div>
+
+          <div className={styles.familiesBelowPreview}>
+            <ExcludedFamilyList families={exclusions.families} onRestore={exclusions.restore} />
           </div>
 
           {subjects && subjects.length > 0 && (
@@ -363,6 +398,9 @@ export default function CreatePage() {
                 </div>
               </div>
 
+              {!isLoggedIn && (
+                <InfoCard variant="warning">{t('ttlWarning')}</InfoCard>
+              )}
               <div className={styles.nameRow}>
                 <div className={styles.nameInputWrap}>
                   <input
@@ -382,9 +420,6 @@ export default function CreatePage() {
                   {t('createButton')}
                 </Button>
               </div>
-              {!isLoggedIn && (
-                <InfoCard variant="warning">{t('ttlWarning')}</InfoCard>
-              )}
             </div>
           )}
         </div>

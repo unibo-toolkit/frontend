@@ -30,6 +30,10 @@
   gap: var(--spacing-18);
 }
 
+.familiesBelowPreview {
+  display: none;
+}
+
 .previewLabel {
   font-size: var(--text-base);
   color: var(--fg-200);
@@ -94,14 +98,8 @@
   cursor: not-allowed;
 }
 
-.noCurricula {
+.emptyNote {
   font-size: var(--text-base);
-  color: var(--fg-200);
-}
-
-/* Subjects count — used inline */
-.subjectsCount {
-  font-size: var(--text-sm);
   color: var(--fg-200);
 }
 
@@ -255,6 +253,14 @@
 
 /* Mobile: single column, hide calendar */
 @media (max-width: 1140px) {
+  .familiesBesideSubjects {
+    display: none;
+  }
+
+  .familiesBelowPreview {
+    display: block;
+  }
+
   .container {
     flex-direction: column;
     padding: 0 var(--spacing-24) var(--spacing-24);

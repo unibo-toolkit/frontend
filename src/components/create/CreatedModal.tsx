@@ -153,7 +153,7 @@ export default function CreatedModal({ isOpen, onClose, calendar, eventCount }: 
           <div className={styles.footer}>
             {isLoggedIn ? (
               <>
-                <Link href="/dashboard" onClick={onClose}>
+                <Link href="/dashboard" onClick={onClose} className={styles.footerPrimary}>
                   <Button variant="primary">{t('goToDashboard')}</Button>
                 </Link>
                 <Link href="/create" onClick={onClose}>
@@ -165,7 +165,7 @@ export default function CreatedModal({ isOpen, onClose, calendar, eventCount }: 
                 <Link href="/" onClick={onClose}>
                   <Button variant="ghost">{t('goToHome')}</Button>
                 </Link>
-                <Link href={`/auth?redirect=${encodeURIComponent(`/cal/${calendar.slug}?autoclaim=1`)}`} onClick={onClose}>
+                <Link href={`/auth?redirect=${encodeURIComponent(`/cal/${calendar.slug}?autoclaim=1`)}`} onClick={onClose} className={styles.footerPrimary}>
                   <Button variant="primary">{t('claimCalendar')}</Button>
                 </Link>
               </>

@@ -54,6 +54,7 @@ export default function PublicCalendarPage() {
   const claimAttemptedRef = useRef(false)
 
   const { data: previewData } = usePreview(subjectIds, apiPage, calendar?.format_event_titles ?? false)
+  const excludedFamilies = useMemo(() => new Set(calendar?.excluded_families ?? []), [calendar?.excluded_families])
 
   const [anchorMonday, setAnchorMonday] = useState<Date | null>(null)
 
@@ -98,9 +99,9 @@ export default function PublicCalendarPage() {
     weekEnd.setDate(weekEnd.getDate() + 7)
     return previewData.items.filter((e) => {
       const d = new Date(e.start_datetime)
-      return d >= weekStart && d < weekEnd
+      return d >= weekStart && d < weekEnd && !excludedFamilies.has(e.family_hash)
     })
-  }, [previewData?.items, currentDate, subjectIds.length])
+  }, [previewData?.items, currentDate, subjectIds.length, excludedFamilies])
 
   const handleWeekChange = (direction: 'prev' | 'next') => {
     const delta = direction === 'next' ? 1 : -1

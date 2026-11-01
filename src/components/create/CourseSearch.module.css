@@ -68,7 +68,13 @@
   border-radius: var(--radius-md);
   max-height: 400px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   z-index: 100;
+  transition: opacity 0.15s;
+}
+
+.stale {
+  opacity: 0.6;
 }
 
 .item {
@@ -103,6 +109,18 @@
 .courseMeta {
   font-size: var(--text-lg);
   color: var(--fg-200);
+}
+
+.flag {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.25em;
+  vertical-align: -0.15em;
+}
+
+.flagText {
+  margin-right: 0.25em;
 }
 
 .courseArea {
