@@ -458,36 +458,6 @@ export default function EditCalendarPage() {
                 <ExcludedFamilyList families={exclusions.families} onRestore={exclusions.restore} />
               </div>
             )}
-
-            <div className={`${styles.formActions} ${styles.blockActions}`}>
-              <Button
-                variant="danger"
-                onClick={() => setShowDeleteConfirm(true)}
-                disabled={deleteCalendar.isPending}
-                fullWidth
-              >
-                {deleteCalendar.isPending ? '...' : dt('deleteCalendarBtn')}
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleSave}
-                disabled={updateCalendar.isPending}
-                fullWidth
-              >
-                {updateCalendar.isPending ? '...' : dt('saveBtn')}
-              </Button>
-            </div>
-
-            <Modal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)}>
-              <div className={styles.modalContent}>
-                <h2 className={styles.modalTitle}>{dt('deleteCalendarBtn')}</h2>
-                <p className={styles.modalDesc}>{dt('deleteCalendarConfirm')}</p>
-                <div className={styles.modalActions}>
-                  <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>{ct('cancel')}</Button>
-                  <Button variant="danger" onClick={handleDelete} disabled={deleteCalendar.isPending}>{ct('delete')}</Button>
-                </div>
-              </div>
-            </Modal>
           </div>
 
           <div className={styles.previewCol}>
@@ -563,6 +533,36 @@ export default function EditCalendarPage() {
                 </div>
               </div>
             </div>
+
+            <div className={`${styles.formActions} ${styles.blockActions}`}>
+              <Button
+                variant="danger"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={deleteCalendar.isPending}
+                fullWidth
+              >
+                {deleteCalendar.isPending ? '...' : dt('deleteCalendarBtn')}
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSave}
+                disabled={updateCalendar.isPending}
+                fullWidth
+              >
+                {updateCalendar.isPending ? '...' : dt('saveBtn')}
+              </Button>
+            </div>
+
+            <Modal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)}>
+              <div className={styles.modalContent}>
+                <h2 className={styles.modalTitle}>{dt('deleteCalendarBtn')}</h2>
+                <p className={styles.modalDesc}>{dt('deleteCalendarConfirm')}</p>
+                <div className={styles.modalActions}>
+                  <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>{ct('cancel')}</Button>
+                  <Button variant="danger" onClick={handleDelete} disabled={deleteCalendar.isPending}>{ct('delete')}</Button>
+                </div>
+              </div>
+            </Modal>
           </div>
         </div>
       </main>
