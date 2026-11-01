@@ -46,7 +46,8 @@
     "github": "Github",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "copyright": "© 2026 UniPlanner"
+    "copyright": "© 2026 UniPlanner",
+    "credits": "Flag icons by <twemoji>Twemoji</twemoji> (© Twitter, Inc and other contributors), licensed under <license>CC-BY 4.0</license>"
   },
   "auth": {
     "title": "Sign in to UniPlanner",
@@ -88,7 +89,7 @@
     "preview": "Preview of calendar",
     "createButton": "Create my calendar",
     "calendarSettings": "Calendar settings",
-    "calendarLang": "Calendar language",
+    "calendarLang": "Language",
     "calendarLangHint": "Affects labels like CFU, Professor, etc. in your calendar",
     "formatTitles": "Format event titles",
     "formatTitlesHint": "Convert UPPERCASE titles to readable format",
@@ -104,9 +105,10 @@
     "calViewMonth": "Month",
     "calViewYear": "Year",
     "noCurricula": "No curricula available for this course.",
+    "noSubjects": "No subjects found for this curriculum yet. Try another year or curriculum.",
     "searchSubjects": "Search subjects...",
     "today": "Today",
-    "ttlWarning": "Your link stays active as long as your calendar use it.",
+    "ttlWarning": "Your link stays active as long as your calendar uses it.",
     "created": {
       "title": "Calendar created",
       "info": "{name} · {count} {count, plural, one {event} other {events}}",
@@ -131,6 +133,19 @@
       "createOwn": "Create own calendar",
       "previewLabel": "Preview of calendar"
     }
+  },
+  "exclusions": {
+    "title": "Excluded lessons",
+    "restoreLabel": "Restore {title}",
+    "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+    "hintTitle": "Don’t attend some lessons?",
+    "hintText": "Click a lesson in the preview to skip it every week. Skipped lessons won’t appear in your calendar.",
+    "learnMore": "Learn more",
+    "modalTitle": "Skip lessons you don’t attend",
+    "step1": "Click a lesson in the preview. Every lesson of that subject in the same weekly slot is skipped, for example all Monday 13:00 labs.",
+    "step2": "Excluded lessons turn grey in the preview and are listed under “Excluded lessons”.",
+    "step3": "Click a skipped lesson, or its card in the list, to bring it back. Changes apply when you save the calendar.",
+    "gotIt": "Got it"
   },
   "dashboard": {
     "welcome": "Welcome, {name}",

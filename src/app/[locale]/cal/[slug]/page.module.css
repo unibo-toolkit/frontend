@@ -153,16 +153,18 @@
 @media (max-width: 1140px) {
   .container {
     flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-24);
     padding: 0 var(--spacing-24) var(--spacing-24);
   }
 
-  .form {
-    flex: 0 0 100%;
-    width: 100%;
+  .form,
+  .preview {
+    display: contents;
   }
 
-  .preview {
-    width: 100%;
+  .promoCard {
+    order: 1;
   }
 }
 

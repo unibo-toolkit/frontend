@@ -5,6 +5,9 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import styles from './Footer.module.css'
 
+const TWEMOJI_URL = 'https://github.com/jdecked/twemoji'
+const CC_BY_URL = 'https://creativecommons.org/licenses/by/4.0/'
+
 export default function Footer() {
   const t = useTranslations('footer')
 
@@ -27,6 +30,12 @@ export default function Footer() {
         <span>{t('madeFor')}</span>
         <span>{t('copyright')}</span>
       </div>
+      <p className={styles.credits}>
+        {t.rich('credits', {
+          twemoji: (chunks) => <a href={TWEMOJI_URL} target="_blank" rel="noopener noreferrer">{chunks}</a>,
+          license: (chunks) => <a href={CC_BY_URL} target="_blank" rel="noopener noreferrer">{chunks}</a>,
+        })}
+      </p>
     </footer>
   )
 }

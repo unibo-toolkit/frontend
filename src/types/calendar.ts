@@ -65,6 +65,7 @@ export interface Calendar {
   ttl_expires_at: string
   owner_id: string | null
   courses: CalendarCourse[]
+  excluded_families?: string[]
   created_at: string
 }
 
@@ -88,6 +89,7 @@ export interface PublicCalendar {
   format_event_titles: boolean
   claimed: boolean
   courses: CalendarCourse[]
+  excluded_families?: string[]
   total_events: number
   ttl_expires_at: string
   created_at: string
@@ -101,6 +103,7 @@ export interface CreateCalendarRequest {
     curriculum_id: string
     subject_ids: string[]
   }[]
+  excluded_families?: string[]
 }
 
 export interface UpdateCalendarRequest {
@@ -112,4 +115,5 @@ export interface UpdateCalendarRequest {
     curriculum_id: string
     subject_ids: string[]
   }[]
+  excluded_families?: string[]
 }

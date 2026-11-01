@@ -15,7 +15,6 @@ export default function ProgressBar({ step, totalSteps, label }: ProgressBarProp
     <div className={styles.wrapper}>
       <div className={styles.info}>
         <span className={styles.label}>{label}</span>
-        <span className={styles.percentage}>{percentage}%</span>
       </div>
       <div className={styles.track}>
         <div

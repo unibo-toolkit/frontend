@@ -93,6 +93,12 @@
   gap: 32px;
 }
 
+.blockPreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-18);
+}
+
 .previewCol {
   flex: 1;
   min-width: 0;
@@ -335,14 +341,18 @@
     flex-direction: column;
   }
 
-  .formCol {
-    flex: 0 0 100%;
-    width: 100%;
+  .formCol,
+  .previewCol {
+    display: contents;
   }
 
-  .previewCol {
-    width: 100%;
-  }
+  .blockName { order: 1; }
+  .blockSubjects { order: 2; }
+  .blockPreview { order: 3; }
+  .blockFamilies { order: 4; }
+  .blockSettings { order: 5; }
+  .blockActions { order: 6; }
+  .blockInfo { order: 7; }
 }
 
 /* Responsive: mobile */
@@ -356,7 +366,7 @@
   }
 
   .formActions {
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: var(--spacing-16);
   }
 
@@ -375,16 +385,9 @@
     gap: var(--spacing-8);
   }
 
-  .content {
-    flex-direction: column;
-  }
-
-  /* Breadcrumb becomes multi-line on mobile — each item + separator on its own line */
-  .breadcrumb {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-8);
-    font-size: var(--text-lg);
+  .breadcrumb,
+  .subtitle {
+    display: none;
   }
 }
 

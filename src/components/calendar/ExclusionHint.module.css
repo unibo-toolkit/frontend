@@ -1,0 +1,138 @@
+.hint {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16) var(--spacing-22);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-150);
+  color: var(--fg-150);
+}
+
+.icon {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+  color: var(--fg-200);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+}
+
+.title {
+  font-size: var(--text-base);
+  color: var(--fg-100);
+}
+
+.body {
+  font-size: var(--text-sm);
+  color: var(--fg-200);
+}
+
+.learnMore {
+  flex-shrink: 0;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.modalTitle {
+  font-size: var(--text-3xl);
+  color: var(--fg-100);
+}
+
+.video {
+  display: block;
+  align-self: center;
+  width: auto;
+  max-width: 100%;
+  max-height: 45svh;
+  aspect-ratio: 1200 / 928;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-150);
+  object-fit: cover;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  font-size: var(--text-lg);
+  color: var(--fg-200);
+  line-height: 1.5;
+}
+
+.steps li {
+  display: flex;
+  gap: var(--spacing-12);
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background-color: var(--bg-150);
+  color: var(--fg-100);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 768px) and (hover: none) {
+  .video {
+    max-width: calc(100% + var(--spacing-48));
+    max-height: 55svh;
+    margin-inline: calc(var(--spacing-24) * -1);
+  }
+}
+
+@media (min-width: 768px) and (hover: none) and (orientation: landscape) {
+  .video {
+    max-height: 50svh;
+  }
+}
+
+@media (max-width: 767px) {
+  .hint {
+    flex-wrap: wrap;
+  }
+
+  .learnMore {
+    width: 100%;
+  }
+
+  .modalTitle {
+    font-size: var(--text-2xl);
+  }
+
+  .steps {
+    font-size: var(--text-base);
+  }
+
+  .modalActions > * {
+    width: 100%;
+  }
+}
